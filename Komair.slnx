@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Komair.Expressions/Komair.Expressions.csproj" />
+    <Project Path="src/Komair.Expressions.Mapping/Komair.Expressions.Mapping.csproj" />
+    <Project Path="src/Komair.Expressions.Mapping.Mapster/Komair.Expressions.Mapping.Mapster.csproj" />
+    <Project Path="src/Komair.Expressions.Serialization/Komair.Expressions.Serialization.csproj" />
+    <Project Path="src/Komair.Expressions.Serialization.Json/Komair.Expressions.Serialization.Json.csproj" />
+    <Project Path="src/Komair.Specifications/Komair.Specifications.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Komair.Expressions.Serialization.UnitTests/Komair.Expressions.Serialization.UnitTests.csproj" />
+    <Project Path="test/Komair.Specifications.UnitTests/Komair.Specifications.UnitTests.csproj" />
+  </Folder>
+</Solution>

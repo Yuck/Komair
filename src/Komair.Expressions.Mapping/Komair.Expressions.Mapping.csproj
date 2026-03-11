@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Description>A .NET abstraction library for mapping Komair.Expressions.ExpressionNode objects to/from other types (in particular, System.Linq.Expressions objects).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Komair.Expressions\Komair.Expressions.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Description>A .NET library implementing Komair.Expressions.Serialization using the Newtonsoft.Json package.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Komair.Expressions.Serialization\Komair.Expressions.Serialization.csproj" />
+  </ItemGroup>
+
+</Project>

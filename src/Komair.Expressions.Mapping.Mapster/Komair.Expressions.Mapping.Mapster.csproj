@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Description>A .NET library implementing Komair.Expressions.Mapping using the Mapster package.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mapster" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Komair.Expressions.Mapping\Komair.Expressions.Mapping.csproj" />
+  </ItemGroup>
+
+</Project>

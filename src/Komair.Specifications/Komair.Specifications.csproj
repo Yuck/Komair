@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RepositoryUrl>https://github.com/Yuck/Komair.Specifications</RepositoryUrl>
+    <Description>A .NET implementation of the Specification pattern.</Description>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Komair.Expressions.Mapping.Mapster\Komair.Expressions.Mapping.Mapster.csproj" />
+    <ProjectReference Include="..\..\src\Komair.Expressions.Mapping\Komair.Expressions.Mapping.csproj" />
+    <ProjectReference Include="..\..\src\Komair.Expressions.Serialization.Json\Komair.Expressions.Serialization.Json.csproj" />
+    <ProjectReference Include="..\..\src\Komair.Expressions.Serialization\Komair.Expressions.Serialization.csproj" />
+  </ItemGroup>
+
+</Project>
