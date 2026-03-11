@@ -2,8 +2,6 @@
 
 A .NET solution of lightweight, composable libraries for working with expression trees and specifications. It provides serializable equivalents of `System.Linq.Expressions`, abstractions for mapping and serialization, and an implementation of the Specification pattern.
 
-The repository layout, build configuration, and CI are structured similarly to [YuckQi](https://github.com/Yuck/YuckQi).
-
 ## Overview
 
 Komair provides:
@@ -43,3 +41,7 @@ dotnet test
 GitHub Actions (`.github/workflows/ci.yml`) runs `dotnet build` and `dotnet test` on pull requests and pushes to `main`/`master`, using the `Komair.slnx` solution file.
 
 Requires [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
+
+## Authors
+
+Kevin J Lambert & Omair Sajid
