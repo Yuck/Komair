@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 
 namespace Komair.Specifications.Internal.ExpressionTrees;
 
@@ -11,5 +11,8 @@ internal class ParameterReplacer : ExpressionVisitor
         _parameter = parameter;
     }
 
-    protected override Expression VisitParameter(ParameterExpression parameter) => base.VisitParameter(_parameter);
+    protected override Expression VisitParameter(ParameterExpression parameter)
+    {
+        return base.VisitParameter(_parameter);
+    }
 }

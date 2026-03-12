@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Komair.Specifications.Abstract;
 
 namespace Komair.Specifications;
@@ -11,5 +11,8 @@ public class TrueSpecification<T> : SpecificationBase<T>
 
     private TrueSpecification() { }
 
-    public override Expression<Func<T, Boolean>> ToExpression() => GetLambda(Expression.Constant(true));
+    public override Expression<Func<T, Boolean>> ToExpression()
+    {
+        return GetLambda(Expression.Constant(true));
+    }
 }

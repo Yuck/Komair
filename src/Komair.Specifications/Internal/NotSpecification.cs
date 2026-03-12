@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Komair.Specifications.Abstract;
 using Komair.Specifications.Abstract.Interfaces;
 
@@ -8,5 +8,8 @@ internal class NotSpecification<T>(ISpecification<T> specification) : Specificat
 {
     private readonly ISpecification<T> _specification = specification;
 
-    public override Expression<Func<T, Boolean>> ToExpression() => GetLambda(Expression.Not(_specification.ToExpression().Body));
+    public override Expression<Func<T, Boolean>> ToExpression()
+    {
+        return GetLambda(Expression.Not(_specification.ToExpression().Body));
+    }
 }

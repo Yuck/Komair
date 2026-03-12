@@ -24,7 +24,7 @@ Komair provides:
 |-------------------------------------------|-------------|
 | **Komair.Expressions**                    | Serializable equivalents of `System.Linq.Expressions`. |
 | **Komair.Expressions.Serialization**      | Abstractions for serializing `ExpressionNode` objects. |
-| **Komair.Expressions.Serialization.Json** | JSON-based implementation of expression serialization (Newtonsoft.Json). |
+| **Komair.Expressions.Serialization.Json** | Newtonsoft.Json implementation of expression serialization. |
 | **Komair.Expressions.Mapping**            | Abstractions for mapping `ExpressionNode` objects to/from other representations. |
 | **Komair.Expressions.Mapping.Mapster**    | Mapster-based implementation of expression mapping. |
 | **Komair.Specifications**                 | Implementation of the Specification pattern. |
