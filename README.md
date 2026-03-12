@@ -1,5 +1,7 @@
 # Komair
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A .NET solution of lightweight, composable libraries for working with expression trees and specifications. It provides serializable equivalents of `System.Linq.Expressions`, abstractions for mapping and serialization, and an implementation of the Specification pattern.
 
 ## Overview
@@ -20,14 +22,14 @@ Komair provides:
 
 ### Source Packages
 
-| Package                                   | Description |
-|-------------------------------------------|-------------|
-| **Komair.Expressions**                    | Serializable equivalents of `System.Linq.Expressions`. |
-| **Komair.Expressions.Serialization**      | Abstractions for serializing `ExpressionNode` objects. |
-| **Komair.Expressions.Serialization.Json** | Newtonsoft.Json implementation of expression serialization. |
-| **Komair.Expressions.Mapping**            | Abstractions for mapping `ExpressionNode` objects to/from other representations. |
-| **Komair.Expressions.Mapping.Mapster**    | Mapster-based implementation of expression mapping. |
-| **Komair.Specifications**                 | Implementation of the Specification pattern. |
+| Package                                   | NuGet | Description |
+|-------------------------------------------|-------|-------------|
+| **Komair.Expressions**                    | [![NuGet](https://img.shields.io/nuget/v/Komair.Expressions.svg)](https://www.nuget.org/packages/Komair.Expressions) | Serializable equivalents of `System.Linq.Expressions`. |
+| **Komair.Expressions.Serialization**      | [![NuGet](https://img.shields.io/nuget/v/Komair.Expressions.Serialization.svg)](https://www.nuget.org/packages/Komair.Expressions.Serialization) | Abstractions for serializing `ExpressionNode` objects. |
+| **Komair.Expressions.Serialization.Json** | [![NuGet](https://img.shields.io/nuget/v/Komair.Expressions.Serialization.Json.svg)](https://www.nuget.org/packages/Komair.Expressions.Serialization.Json) | Newtonsoft.Json implementation of expression serialization. |
+| **Komair.Expressions.Mapping**            | [![NuGet](https://img.shields.io/nuget/v/Komair.Expressions.Mapping.svg)](https://www.nuget.org/packages/Komair.Expressions.Mapping) | Abstractions for mapping `ExpressionNode` objects. |
+| **Komair.Expressions.Mapping.Mapster**    | [![NuGet](https://img.shields.io/nuget/v/Komair.Expressions.Mapping.Mapster.svg)](https://www.nuget.org/packages/Komair.Expressions.Mapping.Mapster) | Mapster-based implementation of expression mapping. |
+| **Komair.Specifications**                 | [![NuGet](https://img.shields.io/nuget/v/Komair.Specifications.svg)](https://www.nuget.org/packages/Komair.Specifications) | Implementation of the Specification pattern. |
 
 ## Building and Testing
 
