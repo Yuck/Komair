@@ -1,0 +1,39 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: "8.0.x"
+
+jobs:
+  publish:
+    name: Build, Pack, and Publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore Komair.slnx
+
+      - name: Build
+        run: dotnet build Komair.slnx --no-restore -c Release
+
+      - name: Test
+        run: dotnet test Komair.slnx --no-build -c Release --verbosity normal
+
+      - name: Pack
+        run: dotnet pack Komair.slnx --no-build -c Release -o ./artifacts
+
+      - name: Publish to NuGet
+        run: dotnet nuget push "./artifacts/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
