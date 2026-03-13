@@ -1,19 +1,18 @@
 using System.Linq.Expressions;
+using System.Text.Json.Nodes;
 using Komair.Expressions.Abstract;
 using Komair.Expressions.Mapping.Abstract.Interfaces;
 using Komair.Expressions.Mapping.Mapster;
 using Komair.Expressions.Serialization.Abstract.Interfaces;
 using Komair.Expressions.Serialization.Json;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace Komair.Expressions.Serialization.UnitTests.Serialization.Json;
 
-public class JsonExpressionNodeSerializerTests
+public class ExpressionNodeSerializerTests
 {
     [Test]
-    public void Roundtrips_Expression_Through_Json_Serializer()
+    public void Round_Trip_Expression_Through_Json_Serializer_Preserves_Evaluation()
     {
         const String value = "test";
 
@@ -32,7 +31,14 @@ public class JsonExpressionNodeSerializerTests
 
         Assert.AreEqual(expected, actual);
 
-        static IExpressionNodeMapper<Func<String, Boolean>> GetMapper() => new MapsterExpressionNodeMapper<Func<String, Boolean>>();
-        static IExpressionNodeSerializer<JObject, ExpressionNodeBase> GetSerializer() => new JsonExpressionNodeSerializer<ExpressionNodeBase>(new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+        static IExpressionNodeMapper<Func<String, Boolean>> GetMapper()
+        {
+            return new MapsterExpressionNodeMapper<Func<String, Boolean>>();
+        }
+
+        static IExpressionNodeSerializer<JsonObject, ExpressionNodeBase> GetSerializer()
+        {
+            return new ExpressionNodeSerializer<ExpressionNodeBase>();
+        }
     }
 }

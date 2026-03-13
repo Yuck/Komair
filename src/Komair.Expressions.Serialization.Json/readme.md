@@ -1,18 +1,17 @@
-# komair.expressions.serialization.json
+# Komair.Expressions.Serialization.Json
 
-A JSON-based implementation of Komair expression serialization using `Newtonsoft.Json`.
+A JSON-based implementation of Komair expression serialization using `System.Text.Json`.
 
-## key types
+## Key Types
 
-- **`JsonExpressionNodeSerializer<TNode>`** &ndash; serializes and deserializes expression node graphs to and from `JObject` using `Json.NET` type metadata
+- **`ExpressionNodeSerializer<TNode>`** &ndash; serializes and deserializes expression node graphs to and from `JsonObject` using `System.Text.Json` polymorphic metadata
 
-## dependencies
+## Dependencies
 
-- [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json)
 - `Komair.Expressions`
 - `Komair.Expressions.Serialization`
 
-## installation
+## Installation
 
 ```shell
 dotnet add package Komair.Expressions.Serialization.Json

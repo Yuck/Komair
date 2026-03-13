@@ -2,12 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Description>A .NET library implementing Komair.Expressions.Serialization using the Newtonsoft.Json package.</Description>
+    <Description>A .NET library implementing Komair.Expressions.Serialization using the System.Text.Json APIs.</Description>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Komair.Expressions.Serialization\Komair.Expressions.Serialization.csproj" />

@@ -1,8 +1,8 @@
-# komair.expressions
+# Komair.Expressions
 
 A .NET library providing serializable equivalents of the `System.Linq.Expressions` namespace.
 
-## key types
+## Key Types
 
 - **`ExpressionNodeBase`** &ndash; abstract base for serializable expression nodes
 - **`BinaryExpressionNode`** &ndash; serializable representation of `BinaryExpression`
@@ -11,11 +11,11 @@ A .NET library providing serializable equivalents of the `System.Linq.Expression
 - **`MemberExpressionNode`** &ndash; serializable representation of `MemberExpression`
 - **`ParameterExpressionNode`** &ndash; serializable representation of `ParameterExpression`
 
-## usage
+## Usage
 
 Use these nodes together with the mapping and serialization packages (`Komair.Expressions.Mapping.*`, `Komair.Expressions.Serialization.*`) to transform between expression trees and transport-friendly formats.
 
-## installation
+## Installation
 
 ```shell
 dotnet add package Komair.Expressions

@@ -51,7 +51,7 @@ When creating or editing `.cs` files, apply every section below. Do not rely on 
 
 - **Specification pattern**: `SpecificationBase<T>` combines simple specifications (e.g. `AndSpecification<T>`, `OrSpecification<T>`, `NotSpecification<T>`, `ExpressionSpecification<T>`) to build complex predicates
 - **Expression node abstraction**: `ExpressionNodeBase` and its concrete subclasses (e.g. `BinaryExpressionNode`, `MemberExpressionNode`, `LambdaExpressionNode`, `ConstantExpressionNode`, `ParameterExpressionNode`) represent expression trees in a serializable, mappable form
-- **Serializer abstraction**: `IExpressionNodeSerializer` and implementations (e.g. `JsonExpressionNodeSerializer`) handle converting expression node graphs to and from specific serialization formats
+- **Serializer abstraction**: `IExpressionNodeSerializer` and implementations (e.g. `ExpressionNodeSerializer`) handle converting expression node graphs to and from specific serialization formats
 - **Mapper abstraction**: `IExpressionNodeMapper` and Mapster-based implementations (e.g. `MapsterExpressionNodeMapper` and the various `*Mapper` classes) handle mapping between `System.Linq.Expressions.Expression` and the `ExpressionNodeBase` hierarchy
 
 # Project Structure
