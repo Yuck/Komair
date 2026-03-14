@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -98,14 +97,21 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
         if (targetType == typeof(Single))
             return (Single) element.GetDouble();
         if (targetType.IsEnum)
-            return element.GetString() is { } name ? Enum.Parse(targetType, name) : null;
+        {
+            if (element.ValueKind == JsonValueKind.Number)
+                return Enum.ToObject(targetType, element.GetInt32());
+
+            var name = element.GetString();
+
+            return name is not null ? Enum.Parse(targetType, name) : null;
+        }
 
         return JsonSerializer.Deserialize(element.GetRawText(), targetType);
     }
 
     private static JsonSerializerOptions CreateOptions(JsonSerializerOptions? options)
     {
-        var result = options is null ? new JsonSerializerOptions(JsonSerializerDefaults.General) : new JsonSerializerOptions(options);
+        var result = options is not null ? new JsonSerializerOptions(options) : new JsonSerializerOptions(JsonSerializerDefaults.General);
 
         result.Converters.Add(new TypeJsonConverter());
 
