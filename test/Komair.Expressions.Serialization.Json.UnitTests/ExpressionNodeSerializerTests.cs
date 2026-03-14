@@ -4,10 +4,9 @@ using Komair.Expressions.Abstract;
 using Komair.Expressions.Mapping.Abstract.Interfaces;
 using Komair.Expressions.Mapping.Mapster;
 using Komair.Expressions.Serialization.Abstract.Interfaces;
-using Komair.Expressions.Serialization.Json;
 using NUnit.Framework;
 
-namespace Komair.Expressions.Serialization.UnitTests.Serialization.Json;
+namespace Komair.Expressions.Serialization.Json.UnitTests;
 
 public class ExpressionNodeSerializerTests
 {
