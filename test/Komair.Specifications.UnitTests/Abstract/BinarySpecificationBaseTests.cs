@@ -1,12 +1,44 @@
-using Komair.Specifications.UnitTests.Abstract;
 using NUnit.Framework;
 
-namespace Komair.Specifications.UnitTests.Internal;
+namespace Komair.Specifications.UnitTests.Abstract;
 
-public class OrSpecificationTests
+public class BinarySpecificationBaseTests
 {
     [Test]
-    public void LeftIsFalse_And_RightIsFalse_IsFalse()
+    public void And_WhenBothSatisfied_IsSatisfiedByReturnsTrue()
+    {
+        var left = new SpecificationBaseTests.IsShortStringSpecification();
+        var right = new SpecificationBaseTests.ContainsOrtSpecification();
+        var specification = left.And(right);
+        var result = specification.IsSatisfiedBy(SpecificationBaseTests.ShortString);
+
+        Assert.IsTrue(result);
+    }
+
+    [Test]
+    public void And_WhenLeftNotSatisfied_IsSatisfiedByReturnsFalse()
+    {
+        var left = new SpecificationBaseTests.IsShortStringSpecification();
+        var right = new SpecificationBaseTests.ContainsLongSpecification();
+        var specification = left.And(right);
+        var result = specification.IsSatisfiedBy(SpecificationBaseTests.LongString);
+
+        Assert.IsFalse(result);
+    }
+
+    [Test]
+    public void Or_WhenEitherSatisfied_IsSatisfiedByReturnsTrue()
+    {
+        var left = new SpecificationBaseTests.IsShortStringSpecification();
+        var right = new SpecificationBaseTests.ContainsLongSpecification();
+        var specification = left.Or(right);
+        var result = specification.IsSatisfiedBy(SpecificationBaseTests.LongString);
+
+        Assert.IsTrue(result);
+    }
+
+    [Test]
+    public void Or_WhenNeitherSatisfied_IsSatisfiedByReturnsFalse()
     {
         var left = new SpecificationBaseTests.IsShortStringSpecification();
         var right = new SpecificationBaseTests.ContainsOrtSpecification();
@@ -14,38 +46,5 @@ public class OrSpecificationTests
         var result = specification.IsSatisfiedBy(SpecificationBaseTests.LongString);
 
         Assert.IsFalse(result);
-    }
-
-    [Test]
-    public void LeftIsFalse_And_RightIsTrue_IsTrue()
-    {
-        var left = new SpecificationBaseTests.IsShortStringSpecification();
-        var right = new SpecificationBaseTests.ContainsLongSpecification();
-        var specification = left.Or(right);
-        var result = specification.IsSatisfiedBy(SpecificationBaseTests.LongString);
-
-        Assert.IsTrue(result);
-    }
-
-    [Test]
-    public void LeftIsTrue_And_RightIsFalse_IsTrue()
-    {
-        var left = new SpecificationBaseTests.IsShortStringSpecification();
-        var right = new SpecificationBaseTests.ContainsLongSpecification();
-        var specification = left.Or(right);
-        var result = specification.IsSatisfiedBy(SpecificationBaseTests.ShortString);
-
-        Assert.IsTrue(result);
-    }
-
-    [Test]
-    public void LeftIsTrue_And_RightIsTrue_IsTrue()
-    {
-        var left = new SpecificationBaseTests.IsShortStringSpecification();
-        var right = new SpecificationBaseTests.ContainsOrtSpecification();
-        var specification = left.Or(right);
-        var result = specification.IsSatisfiedBy(SpecificationBaseTests.ShortString);
-
-        Assert.IsTrue(result);
     }
 }
