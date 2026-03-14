@@ -1,19 +1,19 @@
-# komair.expressions.mapping.mapster
+# Komair.Expressions.Mapping.Mapster
 
 A Mapster-based implementation of the Komair expression mapping abstractions.
 
-## key types
+## Key Types
 
 - **`MapsterExpressionNodeMapper<T>`** &ndash; maps between `ExpressionNodeBase` and `Expression<T>` using Mapster configuration
 - **mapper configuration** &ndash; Mapster `TypeAdapterConfig` with profiles for all supported expression node shapes
 
-## dependencies
+## Dependencies
 
 - [Mapster](https://www.nuget.org/packages/Mapster)
 - `Komair.Expressions`
 - `Komair.Expressions.Mapping`
 
-## installation
+## Installation
 
 ```shell
 dotnet add package Komair.Expressions.Mapping.Mapster

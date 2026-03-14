@@ -51,7 +51,7 @@ When creating or editing `.cs` files, apply every section below. Do not rely on 
 
 - **Specification pattern**: `SpecificationBase<T>` combines simple specifications (e.g. `AndSpecification<T>`, `OrSpecification<T>`, `NotSpecification<T>`, `ExpressionSpecification<T>`) to build complex predicates
 - **Expression node abstraction**: `ExpressionNodeBase` and its concrete subclasses (e.g. `BinaryExpressionNode`, `MemberExpressionNode`, `LambdaExpressionNode`, `ConstantExpressionNode`, `ParameterExpressionNode`) represent expression trees in a serializable, mappable form
-- **Serializer abstraction**: `IExpressionNodeSerializer` and implementations (e.g. `JsonExpressionNodeSerializer`) handle converting expression node graphs to and from specific serialization formats
+- **Serializer abstraction**: `IExpressionNodeSerializer` and implementations (e.g. `ExpressionNodeSerializer`) handle converting expression node graphs to and from specific serialization formats
 - **Mapper abstraction**: `IExpressionNodeMapper` and Mapster-based implementations (e.g. `MapsterExpressionNodeMapper` and the various `*Mapper` classes) handle mapping between `System.Linq.Expressions.Expression` and the `ExpressionNodeBase` hierarchy
 
 # Project Structure
@@ -61,7 +61,8 @@ When creating or editing `.cs` files, apply every section below. Do not rely on 
 - Provider-specific or implementation-specific code lives in dedicated projects such as `Komair.Expressions.Serialization.Json` and `Komair.Expressions.Mapping.Mapster`
 - Organize shared abstractions under `Abstract/` and their interfaces under `Abstract/Interfaces/` (e.g. `Komair.Specifications.Abstract`, `Komair.Expressions.Serialization.Abstract.Interfaces`)
 - Place internal implementation details under `Internal/` where appropriate (e.g. `Komair.Specifications.Internal`, `Komair.Specifications.Internal.ExpressionTrees`)
-- Test projects mirror source project names with a `.UnitTests` suffix (e.g. `Komair.Specifications.UnitTests`, `Komair.Expressions.Serialization.UnitTests`)
+- Add a unit test project only when a source project has testable types; test project names mirror source with a `.UnitTests` suffix (e.g. `Komair.Specifications.UnitTests`, `Komair.Expressions.Serialization.Json.UnitTests`). Do not create test projects that have nothing to test (e.g. abstraction-only projects).
+- Test classes and folder paths mirror their counterparts in the source project (e.g. source `Komair.Expressions.Serialization.Json/ExpressionNodeSerializer.cs` → test `Komair.Expressions.Serialization.Json.UnitTests/ExpressionNodeSerializerTests.cs`; source `.../Configuration/Mappers/ExpressionNode/BinaryExpressionNodeMapper.cs` → test `...UnitTests/Configuration/Mappers/ExpressionNode/BinaryExpressionNodeMapperTests.cs`)
 
 # Versioning
 

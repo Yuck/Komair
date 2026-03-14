@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Komair.Specifications\Komair.Specifications.csproj" />
+    <ProjectReference Include="..\..\src\Komair.Expressions.Mapping.Mapster\Komair.Expressions.Mapping.Mapster.csproj" />
   </ItemGroup>
 
 </Project>

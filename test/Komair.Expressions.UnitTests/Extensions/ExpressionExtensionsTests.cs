@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using Komair.Expressions.Extensions;
 using NUnit.Framework;
 
-namespace Komair.Expressions.Serialization.UnitTests.Extensions;
+namespace Komair.Expressions.UnitTests.Extensions;
 
 public class ExpressionExtensionsTests
 {

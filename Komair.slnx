@@ -8,7 +8,9 @@
     <Project Path="src/Komair.Specifications/Komair.Specifications.csproj" />
   </Folder>
   <Folder Name="/test/">
-    <Project Path="test/Komair.Expressions.Serialization.UnitTests/Komair.Expressions.Serialization.UnitTests.csproj" />
+    <Project Path="test/Komair.Expressions.UnitTests/Komair.Expressions.UnitTests.csproj" />
+    <Project Path="test/Komair.Expressions.Mapping.Mapster.UnitTests/Komair.Expressions.Mapping.Mapster.UnitTests.csproj" />
+    <Project Path="test/Komair.Expressions.Serialization.Json.UnitTests/Komair.Expressions.Serialization.Json.UnitTests.csproj" />
     <Project Path="test/Komair.Specifications.UnitTests/Komair.Specifications.UnitTests.csproj" />
   </Folder>
 </Solution>

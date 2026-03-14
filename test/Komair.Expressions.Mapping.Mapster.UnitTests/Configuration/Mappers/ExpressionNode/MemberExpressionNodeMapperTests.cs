@@ -1,9 +1,8 @@
 using System.Linq.Expressions;
 using Komair.Expressions.Mapping.Abstract.Interfaces;
-using Komair.Expressions.Mapping.Mapster;
 using NUnit.Framework;
 
-namespace Komair.Expressions.Serialization.UnitTests.Mapping.Mapster.Configuration.Mappers.ExpressionNode;
+namespace Komair.Expressions.Mapping.Mapster.UnitTests.Configuration.Mappers.ExpressionNode;
 
 public class MemberExpressionNodeMapperTests
 {

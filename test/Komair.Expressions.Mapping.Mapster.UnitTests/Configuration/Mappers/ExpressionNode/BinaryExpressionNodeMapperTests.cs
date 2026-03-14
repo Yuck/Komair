@@ -1,9 +1,8 @@
 using System.Linq.Expressions;
 using Komair.Expressions.Mapping.Abstract.Interfaces;
-using Komair.Expressions.Mapping.Mapster;
 using NUnit.Framework;
 
-namespace Komair.Expressions.Serialization.UnitTests.Mapping.Mapster.Configuration.Mappers.ExpressionNode;
+namespace Komair.Expressions.Mapping.Mapster.UnitTests.Configuration.Mappers.ExpressionNode;
 
 public class BinaryExpressionNodeMapperTests
 {
@@ -29,7 +28,7 @@ public class BinaryExpressionNodeMapperTests
             var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<Int32, Int32>))
             {
                 Body = new BinaryExpressionNode(operation, typeof(Int32)) { Left = parameter, Right = parameter },
-                Parameters = new List<ParameterExpressionNode> { parameter }
+                Parameters = [parameter]
             };
             var expression = mapper.ToExpression(node);
 
@@ -55,7 +54,7 @@ public class BinaryExpressionNodeMapperTests
             var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<Int32, Boolean>))
             {
                 Body = new BinaryExpressionNode(operation, typeof(Int32)) { Left = parameter, Right = parameter },
-                Parameters = new List<ParameterExpressionNode> { parameter }
+                Parameters = [parameter]
             };
             var expression = mapper.ToExpression(node);
 
@@ -80,7 +79,7 @@ public class BinaryExpressionNodeMapperTests
             var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<Boolean, Boolean>))
             {
                 Body = new BinaryExpressionNode(operation, typeof(Boolean)) { Left = parameter, Right = parameter },
-                Parameters = new List<ParameterExpressionNode> { parameter }
+                Parameters = [parameter]
             };
             var expression = mapper.ToExpression(node);
 
@@ -105,7 +104,7 @@ public class BinaryExpressionNodeMapperTests
             var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<Double, Double>))
             {
                 Body = new BinaryExpressionNode(operation, typeof(Double)) { Left = parameter, Right = parameter },
-                Parameters = new List<ParameterExpressionNode> { parameter }
+                Parameters = [parameter]
             };
             var expression = mapper.ToExpression(node);
 
@@ -123,7 +122,7 @@ public class BinaryExpressionNodeMapperTests
         var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<String, String>))
         {
             Body = new BinaryExpressionNode(ExpressionType.Coalesce, typeof(String)) { Left = parameter, Right = parameter },
-            Parameters = new List<ParameterExpressionNode> { parameter }
+            Parameters = [parameter]
         };
         var expression = mapper.ToExpression(node);
 
@@ -140,7 +139,7 @@ public class BinaryExpressionNodeMapperTests
         var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<String, String>))
         {
             Body = new BinaryExpressionNode(ExpressionType.ArrayIndex, typeof(String)) { Left = parameter, Right = parameter },
-            Parameters = new List<ParameterExpressionNode> { parameter }
+            Parameters = [parameter]
         };
 
         Assert.Throws<NotSupportedException>(() => mapper.ToExpression(node));
