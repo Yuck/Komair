@@ -37,9 +37,3 @@ Komair provides:
 dotnet build
 dotnet test
 ```
-
-## CI
-
-GitHub Actions (`.github/workflows/ci.yml`) runs `dotnet build` and `dotnet test` on pull requests and pushes to `main`/`master`, using the `Komair.slnx` solution file.
-
-Requires [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
