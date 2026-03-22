@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [main, master]
+    branches: [main]
   push:
-    branches: [main, master]
+    branches: [main]
 
 env:
   DOTNET_VERSION: "8.0.x"
@@ -44,12 +44,55 @@ jobs:
 
       - name: Generate Coverage Report
         if: success()
+        env:
+          COVERAGE_FONT_IMPORT: '@import url("https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap");'
+          COVERAGE_FONT_OVERRIDES: |
+            /* Komair: Syne Mono for ReportGenerator HTML (merged after vendor report.css). */
+
+            html,
+            body {
+              font-family: "Syne Mono", ui-monospace, monospace !important;
+            }
+
+            h1,
+            .card-group .card .card-header {
+              font-family: "Syne Mono", ui-monospace, monospace !important;
+            }
+
+            h2,
+            h3,
+            table,
+            th,
+            td,
+            label,
+            a,
+            button,
+            input,
+            select {
+              font-family: "Syne Mono", ui-monospace, monospace !important;
+            }
+
+            code,
+            pre {
+              font-family: "Syne Mono", ui-monospace, monospace !important;
+            }
+
+            .ct-label {
+              font-family: "Syne Mono", ui-monospace, monospace !important;
+            }
         run: |
           reportgenerator \
             "-reports:${{ github.workspace }}/test/.results/**/coverage.cobertura.xml" \
             "-targetdir:${{ github.workspace }}/test/.coverage" \
             "-reporttypes:MarkdownSummaryGithub;Html" \
             "-title:Komair code coverage"
+          MERGED="${{ github.workspace }}/test/.coverage/report.css.merged"
+          {
+            printf '%s\n' "$COVERAGE_FONT_IMPORT"
+            cat "${{ github.workspace }}/test/.coverage/report.css"
+            printf '%s\n' "$COVERAGE_FONT_OVERRIDES"
+          } > "$MERGED"
+          mv "$MERGED" "${{ github.workspace }}/test/.coverage/report.css"
           if [ -f test/.coverage/SummaryGithub.md ]; then
             cat test/.coverage/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
           fi
