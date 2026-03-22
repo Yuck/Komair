@@ -8,6 +8,7 @@ on:
 
 env:
   DOTNET_VERSION: "8.0.x"
+  REPORTGENERATOR_VERSION: "5.4.1"
 
 jobs:
   build-and-test:
@@ -28,5 +29,35 @@ jobs:
       - name: Build
         run: dotnet build Komair.slnx --no-restore -c Release
 
-      - name: Test
-        run: dotnet test Komair.slnx --no-build -c Release --verbosity normal
+      - name: Test with Coverage
+        run: >
+          dotnet test Komair.slnx
+          --no-build
+          -c Release
+          --verbosity normal
+          --collect:"XPlat Code Coverage"
+          --results-directory "${{ github.workspace }}/test/.results"
+
+      - name: Install ReportGenerator
+        if: success()
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool --version ${{ env.REPORTGENERATOR_VERSION }}
+
+      - name: Generate Coverage Report
+        if: success()
+        run: |
+          reportgenerator \
+            "-reports:${{ github.workspace }}/test/.results/**/coverage.cobertura.xml" \
+            "-targetdir:${{ github.workspace }}/test/.coverage" \
+            "-reporttypes:MarkdownSummaryGithub;Html" \
+            "-title:Komair code coverage"
+          if [ -f test/.coverage/SummaryGithub.md ]; then
+            cat test/.coverage/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload HTML Coverage Report
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: test/.coverage
+          if-no-files-found: ignore
