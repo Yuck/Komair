@@ -3,17 +3,10 @@ using Komair.Specifications.Abstract;
 
 namespace Komair.Specifications.Internal;
 
-internal class ExpressionSpecification<T> : SpecificationBase<T>
+internal class ExpressionSpecification<T>(Expression<Func<T, Boolean>> expression) : SpecificationBase<T>
 {
-    private readonly Expression<Func<T, Boolean>> _expression;
-
-    internal ExpressionSpecification(Expression<Func<T, Boolean>> expression) : base()
-    {
-        _expression = expression;
-    }
-
     public override Expression<Func<T, Boolean>> ToExpression()
     {
-        return _expression;
+        return expression;
     }
 }

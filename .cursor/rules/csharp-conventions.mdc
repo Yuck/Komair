@@ -9,10 +9,10 @@ When creating or editing `.cs` files, apply every section below. Do not rely on 
 
 - Use file-scoped namespaces (`namespace X;`)
 - Type definitions (class, struct, interface, record) that have no body should be terminated with a semicolon (e.g., `class Foo;` not `class Foo { }`)
-- Use primary constructors for dependency injection and parameter forwarding
+- **Primary constructors**: use them **when possible** for dependency injection and parameter forwarding. **Otherwise**, declare the type with an explicit constructor and follow **type member ordering** (below) for fields, properties, constructors, and methods
 - Use full CLR type names: `String`, `Boolean`, `Int32`, `Object` (not `string`, `bool`, `int`, `object`)
 - Use `var` for local variables
-- Use `ArgumentNullException.ThrowIfNull()` for null guards
+- Use `ArgumentNullException.ThrowIfNull()` when null is a real risk (e.g. parameter type is nullable `?`, or public surface where callers might pass null despite annotations). Do **not** add redundant guards for parameters that are non-nullable under enabled nullable reference types and are not marked with `?`—the compiler encodes that contract
 - Use `is null` for null checks and `is not null` for non-null checks (not `== null` or `!= null`)
 - Use block bodies for methods even when single-expression; expression-bodied properties are acceptable
 - Place a space before the `!` negation operator (e.g., `! String.IsNullOrWhiteSpace(value)`)
@@ -31,7 +31,16 @@ When creating or editing `.cs` files, apply every section below. Do not rely on 
 - Use local functions instead of lambda expressions when possible
 - Local functions should appear after a `return;` statement at the end of the method body
 - Properties should be separated by a single blank line
-- Properties should be listed in alphabetical order in the class which defines them
+- Declare **interface** members in alphabetical order unless a rare dependency forces a different order
+
+# Type member ordering (classes, structs, records)
+
+Use this sequence when a **primary constructor is not used**, or for everything declared in the **type body** when a primary constructor still leaves fields, properties, or methods to declare explicitly:
+
+1. **Fields** first (typically `private`; alphabetical by field name)
+2. **Properties** next (alphabetical; separated by a single blank line between properties)
+3. **Constructors** next (all constructors together, before any other methods)
+4. **Remaining members** (methods, events, nested types, etc.): group by accessibility in this order—`public`, `protected`, `internal`, `private`—and within each group list in **alphabetical order** by member name
 
 # Naming Conventions
 
@@ -44,7 +53,10 @@ When creating or editing `.cs` files, apply every section below. Do not rely on 
 - Extension method classes: `*Extensions` suffix (e.g. `ExpressionExtensions`, `MemberExpressionExtensions`, `BinaryExpressionExtensions`)
 - Avoid using abbreviations when naming variables (e.g., prefer `connection` instead of `conn`, `dictionary` instead of `dict`); exception: `unitOfWork` should be abbreviated to `uow`
 - Lambda expression parameters: use `t` as the default temporary variable name regardless of the underlying type; when there are conflicts (e.g. nested lambdas), use `u`, `v`, etc. in sequence (e.g., `t => parameters.Any(u => u.Name == t)`)
-- Unit test method names use `MethodName_Condition_ExpectedResult` format (e.g. `Delete_WhenNotDeleted_SetsDeletionMoment`)
+- Unit test method names use `MethodName_WhenCondition_ExpectedResult` format (e.g. `Delete_WhenNotDeleted_SetsDeletionMoment`, `And_WhenBothSatisfied_ReturnsTrue`). The first segment must name the API under test accurately (e.g. use `Or_When...` for tests of `Or`, not `And`)
+- The third segment should state the outcome in a verb phrase (`ReturnsTrue`, `ReturnsFalse`, `ReturnsSameInstance`, `SetsDeletionMoment`, etc.)
+- List `[Test]` methods in **alphabetical order** within each test class
+- Prefer **one logical assertion shape per test** when naming would otherwise hide multiple outcomes; split into separate tests if the `ExpectedResult` would not fit a single name
 - Mock variables: do not prefix with `mock`; name them after what they represent (e.g., `scope` not `mockScope`, `cursor` not `mockCursor`)
 
 # Design Patterns

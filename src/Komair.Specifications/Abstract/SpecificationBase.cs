@@ -19,9 +19,15 @@ public abstract class SpecificationBase<T> : ISpecification<T>
         return Fold(specifications, this, static (accumulated, next) => new AndSpecification<T>(accumulated, next));
     }
 
-    public Boolean IsSatisfiedBy(T t) => _predicate.Value(t);
+    public Boolean IsSatisfiedBy(T t)
+    {
+        return _predicate.Value(t);
+    }
 
-    public ISpecification<T> Not() => new NotSpecification<T>(this);
+    public ISpecification<T> Not()
+    {
+        return new NotSpecification<T>(this);
+    }
 
     public ISpecification<T> Or(params ISpecification<T>[] specifications)
     {

@@ -3,12 +3,15 @@ using Komair.Specifications.Abstract.Interfaces;
 
 namespace Komair.Specifications.Abstract;
 
-public abstract class BinarySpecificationBase<T>(ISpecification<T> left, ISpecification<T> right) : SpecificationBase<T>()
+public abstract class BinarySpecificationBase<T>(ISpecification<T> left, ISpecification<T> right) : SpecificationBase<T>
 {
     protected ISpecification<T> Left = left;
     protected ISpecification<T> Right = right;
 
-    public override Expression<Func<T, Boolean>> ToExpression() => GetLambda(GetBinaryExpression());
+    public override Expression<Func<T, Boolean>> ToExpression()
+    {
+        return GetLambda(GetBinaryExpression());
+    }
 
     protected abstract BinaryExpression GetBinaryExpression();
 }

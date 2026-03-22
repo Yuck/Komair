@@ -4,17 +4,10 @@ using Komair.Specifications.Abstract.Interfaces;
 
 namespace Komair.Specifications.Internal;
 
-internal class NotSpecification<T> : SpecificationBase<T>
+internal class NotSpecification<T>(ISpecification<T> specification) : SpecificationBase<T>
 {
-    private readonly ISpecification<T> _specification;
-
-    internal NotSpecification(ISpecification<T> specification) : base()
-    {
-        _specification = specification;
-    }
-
     public override Expression<Func<T, Boolean>> ToExpression()
     {
-        return GetLambda(Expression.Not(_specification.ToExpression().Body));
+        return GetLambda(Expression.Not(specification.ToExpression().Body));
     }
 }
