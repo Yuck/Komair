@@ -4,9 +4,14 @@ using Komair.Specifications.Abstract.Interfaces;
 
 namespace Komair.Specifications.Internal;
 
-internal class NotSpecification<T>(ISpecification<T> specification) : SpecificationBase<T>
+internal class NotSpecification<T> : SpecificationBase<T>
 {
-    private readonly ISpecification<T> _specification = specification;
+    private readonly ISpecification<T> _specification;
+
+    internal NotSpecification(ISpecification<T> specification) : base()
+    {
+        _specification = specification;
+    }
 
     public override Expression<Func<T, Boolean>> ToExpression()
     {

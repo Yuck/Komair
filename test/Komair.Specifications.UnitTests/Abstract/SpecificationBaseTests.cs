@@ -73,10 +73,36 @@ public class SpecificationBaseTests
     public void Where_WhenPredicateMatches_ReturnsTrue()
     {
         var specification = new IsShortStringSpecification();
-        var expression = specification.Where(t => t.StartsWith("s"));
+        var expression = specification.Where(t => t.StartsWith('s'));
         var result = expression.Compile().Invoke(ShortString);
 
         Assert.IsTrue(result);
+    }
+
+    [Test]
+    public void And_WithNoArguments_ReturnsSameInstance()
+    {
+        var specification = new IsShortStringSpecification();
+
+        Assert.AreSame(specification, specification.And());
+    }
+
+    [Test]
+    public void And_WithMultipleArguments_FoldsOntoReceiver()
+    {
+        var specification = new IsShortStringSpecification().And(new ContainsOrtSpecification(), new ContainsLongSpecification());
+
+        Assert.IsFalse(specification.IsSatisfiedBy(ShortString));
+        Assert.IsFalse(specification.IsSatisfiedBy(LongString));
+        Assert.IsTrue(specification.IsSatisfiedBy("long ort"));
+    }
+
+    [Test]
+    public void Or_WithNoArguments_ReturnsSameInstance()
+    {
+        var specification = new IsShortStringSpecification();
+
+        Assert.AreSame(specification, specification.Or());
     }
 
     public class ContainsLongSpecification : SpecificationBase<String>

@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Komair.Specifications.Abstract;
 using Komair.Specifications.Abstract.Interfaces;
 
