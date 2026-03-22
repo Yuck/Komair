@@ -5,7 +5,7 @@ namespace Komair.Specifications.UnitTests.Abstract;
 public class BinarySpecificationBaseTests
 {
     [Test]
-    public void And_WhenBothSatisfied_IsSatisfiedByReturnsTrue()
+    public void And_WhenBothSatisfied_ReturnsTrue()
     {
         var left = new SpecificationBaseTests.IsShortStringSpecification();
         var right = new SpecificationBaseTests.ContainsOrtSpecification();
@@ -16,7 +16,7 @@ public class BinarySpecificationBaseTests
     }
 
     [Test]
-    public void And_WhenLeftNotSatisfied_IsSatisfiedByReturnsFalse()
+    public void And_WhenLeftNotSatisfied_ReturnsFalse()
     {
         var left = new SpecificationBaseTests.IsShortStringSpecification();
         var right = new SpecificationBaseTests.ContainsLongSpecification();
@@ -27,7 +27,7 @@ public class BinarySpecificationBaseTests
     }
 
     [Test]
-    public void Or_WhenEitherSatisfied_IsSatisfiedByReturnsTrue()
+    public void Or_WhenEitherSatisfied_ReturnsTrue()
     {
         var left = new SpecificationBaseTests.IsShortStringSpecification();
         var right = new SpecificationBaseTests.ContainsLongSpecification();
@@ -38,7 +38,7 @@ public class BinarySpecificationBaseTests
     }
 
     [Test]
-    public void Or_WhenNeitherSatisfied_IsSatisfiedByReturnsFalse()
+    public void Or_WhenNeitherSatisfied_ReturnsFalse()
     {
         var left = new SpecificationBaseTests.IsShortStringSpecification();
         var right = new SpecificationBaseTests.ContainsOrtSpecification();

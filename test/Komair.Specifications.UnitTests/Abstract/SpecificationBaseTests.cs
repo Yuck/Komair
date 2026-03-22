@@ -10,12 +10,57 @@ public class SpecificationBaseTests
     public const String ShortString = "short";
 
     [Test]
-    public void IsSatisfiedBy_WhenPredicateMatches_ReturnsTrue()
+    public void And_WhenBothSatisfied_ReturnsTrue()
     {
-        var specification = new ContainsLongSpecification();
-        var result = specification.IsSatisfiedBy(LongString);
+        var left = new IsShortStringSpecification();
+        var right = new ContainsOrtSpecification();
+        var specification = left.And(right);
+        var result = specification.IsSatisfiedBy(ShortString);
 
         Assert.IsTrue(result);
+    }
+
+    [Test]
+    public void And_WhenCandidateFailsLengthOperand_ReturnsFalse()
+    {
+        var specification = new IsShortStringSpecification().And(new ContainsOrtSpecification(), new ContainsLongSpecification());
+
+        Assert.IsFalse(specification.IsSatisfiedBy(LongString));
+    }
+
+    [Test]
+    public void And_WhenCandidateFailsOneOfMultipleOperands_ReturnsFalse()
+    {
+        var specification = new IsShortStringSpecification().And(new ContainsOrtSpecification(), new ContainsLongSpecification());
+
+        Assert.IsFalse(specification.IsSatisfiedBy(ShortString));
+    }
+
+    [Test]
+    public void And_WhenCandidateSatisfiesAllOperands_ReturnsTrue()
+    {
+        var specification = new IsShortStringSpecification().And(new ContainsOrtSpecification(), new ContainsLongSpecification());
+
+        Assert.IsTrue(specification.IsSatisfiedBy("long ort"));
+    }
+
+    [Test]
+    public void And_WhenLeftNotSatisfied_ReturnsFalse()
+    {
+        var left = new IsShortStringSpecification();
+        var right = new ContainsLongSpecification();
+        var specification = left.And(right);
+        var result = specification.IsSatisfiedBy(LongString);
+
+        Assert.IsFalse(result);
+    }
+
+    [Test]
+    public void And_WhenNoAdditionalSpecifications_ReturnsSameInstance()
+    {
+        var specification = new IsShortStringSpecification();
+
+        Assert.AreSame(specification, specification.And());
     }
 
     [Test]
@@ -28,23 +73,19 @@ public class SpecificationBaseTests
     }
 
     [Test]
-    public void And_WhenBothSatisfied_ReturnsTrue()
+    public void IsSatisfiedBy_WhenPredicateMatches_ReturnsTrue()
     {
-        var left = new IsShortStringSpecification();
-        var right = new ContainsOrtSpecification();
-        var specification = left.And(right);
-        var result = specification.IsSatisfiedBy(ShortString);
+        var specification = new ContainsLongSpecification();
+        var result = specification.IsSatisfiedBy(LongString);
 
         Assert.IsTrue(result);
     }
 
     [Test]
-    public void And_WhenLeftNotSatisfied_ReturnsFalse()
+    public void Not_WhenSatisfied_ReturnsFalse()
     {
-        var left = new IsShortStringSpecification();
-        var right = new ContainsLongSpecification();
-        var specification = left.And(right);
-        var result = specification.IsSatisfiedBy(LongString);
+        var specification = new IsShortStringSpecification();
+        var result = specification.Not().IsSatisfiedBy(ShortString);
 
         Assert.IsFalse(result);
     }
@@ -61,12 +102,11 @@ public class SpecificationBaseTests
     }
 
     [Test]
-    public void Not_WhenSatisfied_ReturnsFalse()
+    public void Or_WhenNoAdditionalSpecifications_ReturnsSameInstance()
     {
         var specification = new IsShortStringSpecification();
-        var result = specification.Not().IsSatisfiedBy(ShortString);
 
-        Assert.IsFalse(result);
+        Assert.AreSame(specification, specification.Or());
     }
 
     [Test]
@@ -77,32 +117,6 @@ public class SpecificationBaseTests
         var result = expression.Compile().Invoke(ShortString);
 
         Assert.IsTrue(result);
-    }
-
-    [Test]
-    public void And_WithNoArguments_ReturnsSameInstance()
-    {
-        var specification = new IsShortStringSpecification();
-
-        Assert.AreSame(specification, specification.And());
-    }
-
-    [Test]
-    public void And_WithMultipleArguments_FoldsOntoReceiver()
-    {
-        var specification = new IsShortStringSpecification().And(new ContainsOrtSpecification(), new ContainsLongSpecification());
-
-        Assert.IsFalse(specification.IsSatisfiedBy(ShortString));
-        Assert.IsFalse(specification.IsSatisfiedBy(LongString));
-        Assert.IsTrue(specification.IsSatisfiedBy("long ort"));
-    }
-
-    [Test]
-    public void Or_WithNoArguments_ReturnsSameInstance()
-    {
-        var specification = new IsShortStringSpecification();
-
-        Assert.AreSame(specification, specification.Or());
     }
 
     public class ContainsLongSpecification : SpecificationBase<String>

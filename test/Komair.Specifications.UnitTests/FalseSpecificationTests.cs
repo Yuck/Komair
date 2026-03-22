@@ -6,7 +6,7 @@ namespace Komair.Specifications.UnitTests;
 public class FalseSpecificationTests
 {
     [Test]
-    public void False_AndFalse_IsFalse()
+    public void And_WhenCombinedWithFalse_ReturnsFalse()
     {
         var specification = FalseSpecification<String>.Identity;
         var result = specification.And(FalseSpecification<String>.Identity).IsSatisfiedBy(SpecificationBaseTests.ShortString);
@@ -15,34 +15,7 @@ public class FalseSpecificationTests
     }
 
     [Test]
-    public void False_AndLongString_IsFalse()
-    {
-        var specification = FalseSpecification<String>.Identity;
-        var result = specification.IsSatisfiedBy(SpecificationBaseTests.LongString);
-
-        Assert.IsFalse(result);
-    }
-
-    [Test]
-    public void False_AndNull_IsFalse()
-    {
-        var specification = FalseSpecification<String>.Identity;
-        var result = specification.IsSatisfiedBy(null!);
-
-        Assert.IsFalse(result);
-    }
-
-    [Test]
-    public void False_AndShortString_IsFalse()
-    {
-        var specification = FalseSpecification<String>.Identity;
-        var result = specification.IsSatisfiedBy(SpecificationBaseTests.ShortString);
-
-        Assert.IsFalse(result);
-    }
-
-    [Test]
-    public void False_AndTrue_IsFalse()
+    public void And_WhenCombinedWithTrue_ReturnsFalse()
     {
         var specification = FalseSpecification<String>.Identity;
         var result = specification.And(TrueSpecification<String>.Identity).IsSatisfiedBy(SpecificationBaseTests.ShortString);
@@ -51,7 +24,51 @@ public class FalseSpecificationTests
     }
 
     [Test]
-    public void False_OrTrue_IsTrue()
+    public void IsSatisfiedBy_WhenCandidateIsLongString_ReturnsFalse()
+    {
+        var specification = FalseSpecification<String>.Identity;
+        var result = specification.IsSatisfiedBy(SpecificationBaseTests.LongString);
+
+        Assert.IsFalse(result);
+    }
+
+    [Test]
+    public void IsSatisfiedBy_WhenCandidateIsNull_ReturnsFalse()
+    {
+        var specification = FalseSpecification<String>.Identity;
+        var result = specification.IsSatisfiedBy(null!);
+
+        Assert.IsFalse(result);
+    }
+
+    [Test]
+    public void IsSatisfiedBy_WhenCandidateIsShortString_ReturnsFalse()
+    {
+        var specification = FalseSpecification<String>.Identity;
+        var result = specification.IsSatisfiedBy(SpecificationBaseTests.ShortString);
+
+        Assert.IsFalse(result);
+    }
+
+    [Test]
+    public void Or_WhenCandidateMatchesAtLeastOne_ReturnsTrue()
+    {
+        var combined = FalseSpecification<String>.Identity.Or(new SpecificationBaseTests.IsShortStringSpecification(), new SpecificationBaseTests.ContainsLongSpecification());
+
+        Assert.IsTrue(combined.IsSatisfiedBy(SpecificationBaseTests.ShortString));
+        Assert.IsTrue(combined.IsSatisfiedBy(SpecificationBaseTests.LongString));
+    }
+
+    [Test]
+    public void Or_WhenCandidateMatchesNeither_ReturnsFalse()
+    {
+        var combined = FalseSpecification<String>.Identity.Or(new SpecificationBaseTests.IsShortStringSpecification(), new SpecificationBaseTests.ContainsLongSpecification());
+
+        Assert.IsFalse(combined.IsSatisfiedBy("1234567890"));
+    }
+
+    [Test]
+    public void Or_WhenCombinedWithTrue_ReturnsTrue()
     {
         var specification = FalseSpecification<String>.Identity;
         var result = specification.Or(TrueSpecification<String>.Identity).IsSatisfiedBy(SpecificationBaseTests.ShortString);
@@ -60,15 +77,7 @@ public class FalseSpecificationTests
     }
 
     [Test]
-    public void False_OrWithNoArguments_IsFalse()
-    {
-        var specification = FalseSpecification<String>.Identity.Or();
-
-        Assert.IsFalse(specification.IsSatisfiedBy(SpecificationBaseTests.ShortString));
-    }
-
-    [Test]
-    public void False_OrTwoFalseSpecifications_IsFalse()
+    public void Or_WhenGivenTwoFalseSpecifications_ReturnsFalse()
     {
         var specification = FalseSpecification<String>.Identity.Or(FalseSpecification<String>.Identity, FalseSpecification<String>.Identity);
 
@@ -76,7 +85,7 @@ public class FalseSpecificationTests
     }
 
     [Test]
-    public void False_OrFalseAndTrue_IsTrue()
+    public void Or_WhenIncludesTrue_ReturnsTrue()
     {
         var specification = FalseSpecification<String>.Identity.Or(FalseSpecification<String>.Identity, TrueSpecification<String>.Identity);
 
@@ -84,12 +93,10 @@ public class FalseSpecificationTests
     }
 
     [Test]
-    public void False_OrMultipleSpecifications_MatchesLogicalOr()
+    public void Or_WhenNoAdditionalSpecifications_ReturnsFalse()
     {
-        var combined = FalseSpecification<String>.Identity.Or(new SpecificationBaseTests.IsShortStringSpecification(), new SpecificationBaseTests.ContainsLongSpecification());
+        var specification = FalseSpecification<String>.Identity.Or();
 
-        Assert.IsTrue(combined.IsSatisfiedBy(SpecificationBaseTests.ShortString));
-        Assert.IsTrue(combined.IsSatisfiedBy(SpecificationBaseTests.LongString));
-        Assert.IsFalse(combined.IsSatisfiedBy("1234567890"));
+        Assert.IsFalse(specification.IsSatisfiedBy(SpecificationBaseTests.ShortString));
     }
 }
