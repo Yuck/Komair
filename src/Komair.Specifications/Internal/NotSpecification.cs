@@ -6,10 +6,8 @@ namespace Komair.Specifications.Internal;
 
 internal class NotSpecification<T>(ISpecification<T> specification) : SpecificationBase<T>
 {
-    private readonly ISpecification<T> _specification = specification;
-
     public override Expression<Func<T, Boolean>> ToExpression()
     {
-        return GetLambda(Expression.Not(_specification.ToExpression().Body));
+        return GetLambda(Expression.Not(specification.ToExpression().Body));
     }
 }

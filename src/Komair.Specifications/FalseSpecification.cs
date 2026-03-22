@@ -9,7 +9,9 @@ public class FalseSpecification<T> : SpecificationBase<T>
 
     public static FalseSpecification<T> Identity => IdentityInstance.Value;
 
-    private FalseSpecification() { }
+    private FalseSpecification() : base()
+    {
+    }
 
     public override Expression<Func<T, Boolean>> ToExpression()
     {

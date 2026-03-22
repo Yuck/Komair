@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Komair.Specifications.Abstract.Interfaces;
 using Komair.Specifications.Internal;
 using Komair.Specifications.Internal.ExpressionTrees;
@@ -14,17 +14,32 @@ public abstract class SpecificationBase<T> : ISpecification<T>
         _predicate = new Lazy<Func<T, Boolean>>(() => GetLambda(ToExpression()).Compile());
     }
 
-    public ISpecification<T> And(ISpecification<T> specification) => new AndSpecification<T>(this, specification);
+    public ISpecification<T> And(params ISpecification<T>[] specifications)
+    {
+        return Fold(specifications, this, static (accumulated, next) => new AndSpecification<T>(accumulated, next));
+    }
 
-    public Boolean IsSatisfiedBy(T t) => _predicate.Value(t);
+    public Boolean IsSatisfiedBy(T t)
+    {
+        return _predicate.Value(t);
+    }
 
-    public ISpecification<T> Not() => new NotSpecification<T>(this);
+    public ISpecification<T> Not()
+    {
+        return new NotSpecification<T>(this);
+    }
 
-    public ISpecification<T> Or(ISpecification<T> specification) => new OrSpecification<T>(this, specification);
-
-    public Expression<Func<T, Boolean>> Where(Expression<Func<T, Boolean>> predicate) => new AndSpecification<T>(this, new ExpressionSpecification<T>(predicate)).ToExpression();
+    public ISpecification<T> Or(params ISpecification<T>[] specifications)
+    {
+        return Fold(specifications, this, static (accumulated, next) => new OrSpecification<T>(accumulated, next));
+    }
 
     public abstract Expression<Func<T, Boolean>> ToExpression();
+
+    public Expression<Func<T, Boolean>> Where(Expression<Func<T, Boolean>> predicate)
+    {
+        return new AndSpecification<T>(this, new ExpressionSpecification<T>(predicate)).ToExpression();
+    }
 
     protected static Expression<Func<T, Boolean>> GetLambda(Expression expression)
     {
@@ -33,5 +48,10 @@ public abstract class SpecificationBase<T> : ISpecification<T>
         var simplified = body is Expression<Func<T, Boolean>> lambda ? lambda : Expression.Lambda<Func<T, Boolean>>(body, parameters);
 
         return simplified;
+    }
+
+    private static ISpecification<T> Fold(IEnumerable<ISpecification<T>> specifications, ISpecification<T> identity, Func<ISpecification<T>, ISpecification<T>, ISpecification<T>> combine)
+    {
+        return specifications.Aggregate(identity, combine);
     }
 }
