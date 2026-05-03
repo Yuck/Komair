@@ -1,3 +1,4 @@
+---
 description: C# code style, naming conventions, and project structure for this repository
 globs: **/*.cs,**/Directory.Packages.props
 alwaysApply: true
@@ -13,8 +14,13 @@ When creating or editing `.cs` files, apply every section below. Do not rely on 
 - Use full CLR type names: `String`, `Boolean`, `Int32`, `Object` (not `string`, `bool`, `int`, `object`)
 - Use `var` for local variables
 - Use `ArgumentNullException.ThrowIfNull()` when null is a real risk (e.g. parameter type is nullable `?`, or public surface where callers might pass null despite annotations). Do **not** add redundant guards for parameters that are non-nullable under enabled nullable reference types and are not marked with `?`—the compiler encodes that contract
+- For public API boundaries, keep parameters non-nullable unless null is a first-class valid input; still use `ArgumentNullException.ThrowIfNull()` to enforce that contract at runtime where appropriate
+- Place a blank line immediately after `ArgumentNullException.ThrowIfNull(...)` before subsequent statements
 - Use `is null` for null checks and `is not null` for non-null checks (not `== null` or `!= null`)
-- Use block bodies for methods even when single-expression; expression-bodied properties are acceptable
+- Give methods a brace-delimited body (`{ }`); do not use expression-bodied methods (`public T M() => ...`) for ordinary methods that have multiple steps or non-trivial control flow. Expression-bodied **properties** are acceptable
+- Prefer **switch expressions** over `switch` statements when dispatch produces a single value and a switch expression stays readable (e.g. mapping a discriminant to one result); use a `switch` statement when you need per-arm statements before producing a value
+- Keep simple ternary expressions on one line; do not vertically chop ternaries across multiple lines. If a ternary becomes hard to read (especially nested ternaries), rewrite with `if`/`switch` instead of multi-line ternary formatting
+- Prefer pattern matching (`is`, property patterns, type patterns, relational patterns) over direct equality checks when pattern matching expresses the same intent clearly
 - Place a space before the `!` negation operator (e.g., `! String.IsNullOrWhiteSpace(value)`)
 - Omit braces for single-statement `if` blocks
 - Mark concrete exception classes as `sealed`
@@ -41,6 +47,7 @@ Use this sequence when a **primary constructor is not used**, or for everything 
 2. **Properties** next (alphabetical; separated by a single blank line between properties)
 3. **Constructors** next (all constructors together, before any other methods)
 4. **Remaining members** (methods, events, nested types, etc.): group by accessibility in this order—`public`, `protected`, `internal`, `private`—and within each group list in **alphabetical order** by member name
+5. **Unit test fixture classes** (types under `test/` that declare `[Test]` methods): use the same **alphabetical-by-name** rule as step 4 for `public` methods. Place `const` / `static readonly` shared test data first when present; then list **every** `[Test]` method in **strict alphabetical order** by full method name (ordinal sort). After all `[Test]` methods, declare other members (private helpers, etc.) and nested types; when declaring multiple nested types with no dependency order, list nested types in **alphabetical order** by type name
 
 # Naming Conventions
 
@@ -55,7 +62,7 @@ Use this sequence when a **primary constructor is not used**, or for everything 
 - Lambda expression parameters: use `t` as the default temporary variable name regardless of the underlying type; when there are conflicts (e.g. nested lambdas), use `u`, `v`, etc. in sequence (e.g., `t => parameters.Any(u => u.Name == t)`)
 - Unit test method names use `MethodName_WhenCondition_ExpectedResult` format (e.g. `Delete_WhenNotDeleted_SetsDeletionMoment`, `And_WhenBothSatisfied_ReturnsTrue`). The first segment must name the API under test accurately (e.g. use `Or_When...` for tests of `Or`, not `And`)
 - The third segment should state the outcome in a verb phrase (`ReturnsTrue`, `ReturnsFalse`, `ReturnsSameInstance`, `SetsDeletionMoment`, etc.)
-- List `[Test]` methods in **alphabetical order** within each test class
+- Order `[Test]` methods **alphabetically by method name** in each test class—the same ordering rule as **public** instance methods in **Type member ordering** (step 4); see step 5 for fixture-specific layout (`const` first, then all `[Test]` methods alphabetically, then other members)
 - Prefer **one logical assertion shape per test** when naming would otherwise hide multiple outcomes; split into separate tests if the `ExpectedResult` would not fit a single name
 - Mock variables: do not prefix with `mock`; name them after what they represent (e.g., `scope` not `mockScope`, `cursor` not `mockCursor`)
 

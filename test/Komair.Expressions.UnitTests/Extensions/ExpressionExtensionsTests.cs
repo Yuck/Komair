@@ -7,7 +7,7 @@ namespace Komair.Expressions.UnitTests.Extensions;
 public class ExpressionExtensionsTests
 {
     [Test]
-    public void Get_Parameter_List_Returns_Empty_For_Null_Expressions()
+    public void GetParameterList_WhenExpressionNull_ReturnsEmpty()
     {
         var a = GetNullReference<Expression>();
         var b = GetNullReference<BinaryExpression>();
