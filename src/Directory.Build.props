@@ -2,14 +2,16 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
   <PropertyGroup>
     <Authors>Kevin J Lambert, Omair Sajid</Authors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <KomairPackageTags>komair;dotnet;csharp;net8</KomairPackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Yuck/Komair</PackageProjectUrl>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Yuck/Komair.git</RepositoryUrl>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>8.4.0</Version>
+    <Version>8.4.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Include="readme.md" Pack="true" PackagePath="\" />

@@ -9,10 +9,16 @@ using Komair.Expressions.Serialization.Json.Internal;
 
 namespace Komair.Expressions.Serialization.Json;
 
+/// <summary>
+/// Serializes and deserializes <typeparamref name="TExpressionNode"/> instances using <see cref="System.Text.Json"/>.
+/// </summary>
+/// <typeparam name="TExpressionNode">The concrete expression node root type.</typeparam>
+/// <param name="options">Optional JSON serializer options; defaults are used when <see langword="null"/>.</param>
 public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? options = null) : IExpressionNodeSerializer<JsonObject, TExpressionNode> where TExpressionNode : ExpressionNodeBase
 {
     private readonly JsonSerializerOptions _options = CreateOptions(options);
 
+    /// <inheritdoc />
     public TExpressionNode Deserialize(JsonObject document)
     {
         var json = document.ToJsonString();
@@ -27,6 +33,7 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
         return result;
     }
 
+    /// <inheritdoc />
     public JsonObject Serialize(TExpressionNode node)
     {
         var json = JsonSerializer.SerializeToNode(node, _options);
