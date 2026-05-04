@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Komair.Expressions.Exceptions;
 using Komair.Expressions.Mapping.Mapster.Configuration.Mappers.ExpressionNode.Abstract;
 using Mapster;
 using LinqExpression = System.Linq.Expressions.Expression;
@@ -52,7 +53,7 @@ internal class BinaryExpressionNodeMapper(TypeAdapterConfig configuration) : Exp
             ExpressionType.SubtractAssign => LinqExpression.SubtractAssign(left, right),
             ExpressionType.SubtractAssignChecked => LinqExpression.SubtractAssignChecked(left, right),
             ExpressionType.SubtractChecked => LinqExpression.SubtractChecked(left, right),
-            _ => throw new NotSupportedException()
+            _ => throw new UnsupportedExpressionException(source.NodeType)
         };
     }
 }

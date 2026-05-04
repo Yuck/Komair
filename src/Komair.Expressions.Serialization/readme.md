@@ -2,6 +2,10 @@
 
 An abstraction library for serializing `Komair.Expressions.ExpressionNode` objects to and from other representations (including `System.Linq.Expressions`).
 
+## Key Types
+
+- **`ExpressionSerializationException`** (`Komair.Expressions.Serialization.Exceptions`) &ndash; thrown when an `IExpressionNodeSerializer` implementation cannot produce or consume the expected serialized shape (for example a null deserialize result or an unexpected JSON root)
+
 ## Key Concepts
 
 - **serialization boundary** &ndash; defines how `ExpressionNodeBase` graphs are converted to transport-friendly types

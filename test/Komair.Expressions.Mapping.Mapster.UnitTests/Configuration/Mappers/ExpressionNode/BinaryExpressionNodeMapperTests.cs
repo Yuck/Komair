@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Komair.Expressions.Exceptions;
 using Komair.Expressions.Mapping.Abstract.Interfaces;
 using NUnit.Framework;
 
@@ -152,7 +153,7 @@ public class BinaryExpressionNodeMapperTests
     }
 
     [Test]
-    public void ToExpression_WhenUnsupportedOperation_ThrowsNotSupportedException()
+    public void ToExpression_WhenUnsupportedOperation_ThrowsUnsupportedExpressionException()
     {
         var mapper = GetMapper();
         var parameter = new ParameterExpressionNode(ExpressionType.Parameter, typeof(String)) { Name = "t" };
@@ -162,7 +163,9 @@ public class BinaryExpressionNodeMapperTests
             Parameters = [parameter]
         };
 
-        Assert.Throws<NotSupportedException>(() => mapper.ToExpression(node));
+        var exception = Assert.Throws<UnsupportedExpressionException>(() => mapper.ToExpression(node));
+
+        Assert.AreEqual(ExpressionType.ArrayIndex, exception!.NodeType);
 
         static IExpressionNodeMapper<Func<String, String>> GetMapper() => new MapsterExpressionNodeMapper<Func<String, String>>();
     }

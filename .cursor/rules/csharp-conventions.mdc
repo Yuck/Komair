@@ -10,7 +10,7 @@ When creating or editing `.cs` files, apply every section below. Do not rely on 
 
 - Use file-scoped namespaces (`namespace X;`)
 - Type definitions (class, struct, interface, record) that have no body should be terminated with a semicolon (e.g., `class Foo;` not `class Foo { }`)
-- **Primary constructors**: use them **when possible** for dependency injection and parameter forwarding. **Otherwise**, declare the type with an explicit constructor and follow **type member ordering** (below) for fields, properties, constructors, and methods
+- **Primary constructors**: use them **when possible** for dependency injection, parameter forwarding, and `Exception` subclasses whose base chain can be expressed from constructor parameters (for example optional `global::System.Exception? innerException = null` with `: global::System.Exception(...)`, or a private static `CreateMessage` / `NonNull` helper invoked from the base clause so `ArgumentNullException.ThrowIfNull` runs before the base initializer). Qualify `System.Exception` with `global::` in the parameter list and base initializer when otherwise it could be parsed as the derived type name. **Otherwise**, declare the type with an explicit constructor and follow **type member ordering** (below) for fields, properties, constructors, and methods
 - Use full CLR type names: `String`, `Boolean`, `Int32`, `Object` (not `string`, `bool`, `int`, `object`)
 - Use `var` for local variables
 - Use `ArgumentNullException.ThrowIfNull()` when null is a real risk (e.g. parameter type is nullable `?`, or public surface where callers might pass null despite annotations). Do **not** add redundant guards for parameters that are non-nullable under enabled nullable reference types and are not marked with `?`—the compiler encodes that contract
@@ -59,6 +59,7 @@ Use this sequence when a **primary constructor is not used**, or for everything 
 - Protected abstract methods: `Do` prefix for template-method style hooks (when used)
 - Extension method classes: `*Extensions` suffix (e.g. `ExpressionExtensions`, `MemberExpressionExtensions`, `BinaryExpressionExtensions`)
 - Avoid using abbreviations when naming variables (e.g., prefer `connection` instead of `conn`, `dictionary` instead of `dict`); exception: `unitOfWork` should be abbreviated to `uow`
+- Variables holding an `Exception` (including caught instances or `Assert.Throws` results): use `exception`, not `ex`
 - Lambda expression parameters: use `t` as the default temporary variable name regardless of the underlying type; when there are conflicts (e.g. nested lambdas), use `u`, `v`, etc. in sequence (e.g., `t => parameters.Any(u => u.Name == t)`)
 - Unit test method names use `MethodName_WhenCondition_ExpectedResult` format (e.g. `Delete_WhenNotDeleted_SetsDeletionMoment`, `And_WhenBothSatisfied_ReturnsTrue`). The first segment must name the API under test accurately (e.g. use `Or_When...` for tests of `Or`, not `And`)
 - The third segment should state the outcome in a verb phrase (`ReturnsTrue`, `ReturnsFalse`, `ReturnsSameInstance`, `SetsDeletionMoment`, etc.)
@@ -80,8 +81,9 @@ Use this sequence when a **primary constructor is not used**, or for everything 
 - Provider-specific or implementation-specific code lives in dedicated projects such as `Komair.Expressions.Serialization.Json` and `Komair.Expressions.Mapping.Mapster`
 - Organize shared abstractions under `Abstract/` and their interfaces under `Abstract/Interfaces/` (e.g. `Komair.Specifications.Abstract`, `Komair.Expressions.Serialization.Abstract.Interfaces`)
 - Place internal implementation details under `Internal/` where appropriate (e.g. `Komair.Specifications.Internal`, `Komair.Specifications.Internal.ExpressionTrees`)
+- Place public exception types under `Exceptions/` using namespace `{ProjectRootNamespace}.Exceptions` (e.g. `Komair.Expressions.Exceptions`, `Komair.Expressions.Mapping.Exceptions`)
 - Add a unit test project only when a source project has testable types; test project names mirror source with a `.UnitTests` suffix (e.g. `Komair.Specifications.UnitTests`, `Komair.Expressions.Serialization.Json.UnitTests`). Do not create test projects that have nothing to test (e.g. abstraction-only projects).
-- Test classes and folder paths mirror their counterparts in the source project (e.g. source `Komair.Expressions.Serialization.Json/ExpressionNodeSerializer.cs` → test `Komair.Expressions.Serialization.Json.UnitTests/ExpressionNodeSerializerTests.cs`; source `.../Configuration/Mappers/ExpressionNode/BinaryExpressionNodeMapper.cs` → test `...UnitTests/Configuration/Mappers/ExpressionNode/BinaryExpressionNodeMapperTests.cs`)
+- Test classes and folder paths mirror their counterparts in the source project (e.g. source `Komair.Expressions.Serialization.Json/ExpressionNodeSerializer.cs` → test `Komair.Expressions.Serialization.Json.UnitTests/ExpressionNodeSerializerTests.cs`; source `Komair.Expressions.Mapping.Mapster/MapsterExpressionNodeMapper.cs` → test `Komair.Expressions.Mapping.Mapster.UnitTests/MapsterExpressionNodeMapperTests.cs`; source `.../Configuration/Mappers/ExpressionNode/BinaryExpressionNodeMapper.cs` → test `...UnitTests/Configuration/Mappers/ExpressionNode/BinaryExpressionNodeMapperTests.cs`)
 
 # Versioning
 

@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Komair.Expressions.Mapping.Abstract.Interfaces;
+using Komair.Expressions.Mapping.Exceptions;
 using NUnit.Framework;
 
 namespace Komair.Expressions.Mapping.Mapster.UnitTests.Configuration.Mappers.ExpressionNode;
@@ -29,7 +30,7 @@ public class MemberExpressionNodeMapperTests
     }
 
     [Test]
-    public void ToExpression_WhenMemberAccessExpressionNull_ThrowsNullReferenceException()
+    public void ToExpression_WhenMemberAccessExpressionNull_ThrowsInvalidMemberNodeException()
     {
         var expressionType = ExpressionType.MemberAccess;
         var memberExpressionNode = new MemberExpressionNode(expressionType, typeof(String))
@@ -45,7 +46,9 @@ public class MemberExpressionNodeMapperTests
 
         var mapper = GetMapper();
 
-        Assert.Throws<NullReferenceException>(() => mapper.ToExpression(lambdaExpressionNode));
+        var exception = Assert.Throws<InvalidMemberNodeException>(() => mapper.ToExpression(lambdaExpressionNode));
+
+        Assert.AreEqual("HelloWorld", exception!.MemberName);
 
         static IExpressionNodeMapper<Func<String, String>> GetMapper() => new MapsterExpressionNodeMapper<Func<String, String>>();
     }
