@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Komair.Expressions.Abstract;
 using Komair.Expressions.Serialization.Abstract.Interfaces;
+using Komair.Expressions.Serialization.Exceptions;
 using Komair.Expressions.Serialization.Json.Internal;
 
 namespace Komair.Expressions.Serialization.Json;
@@ -21,7 +22,7 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
             result = (TExpressionNode) MaterializeConstantValues(root);
 
         if (result is null)
-            throw new JsonException($"Failed to deserialize {typeof(TExpressionNode).Name} from JSON.");
+            throw new ExpressionSerializationException($"Failed to deserialize {typeof(TExpressionNode).Name} from JSON.");
 
         return result;
     }
@@ -32,7 +33,7 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
         if (json is JsonObject value)
             return value;
 
-        throw new JsonException("Expected JSON root to be an object.");
+        throw new ExpressionSerializationException("Expected JSON root to be an object.");
     }
 
     private static ExpressionNodeBase MaterializeConstantValues(ExpressionNodeBase node)

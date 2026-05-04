@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Komair.Expressions.Exceptions;
 using Komair.Expressions.Mapping.Abstract.Interfaces;
 using NUnit.Framework;
 
@@ -7,7 +8,74 @@ namespace Komair.Expressions.Mapping.Mapster.UnitTests.Configuration.Mappers.Exp
 public class BinaryExpressionNodeMapperTests
 {
     [Test]
-    public void Maps_Int_To_Int_Operations()
+    public void ToExpression_WhenBooleanLogicalOperations_ReturnsNonNull()
+    {
+        var operations = new[]
+        {
+            ExpressionType.AndAlso, ExpressionType.OrElse
+        };
+        var mapper = GetMapper();
+        var parameter = new ParameterExpressionNode(ExpressionType.Parameter, typeof(Boolean)) { Name = "t" };
+
+        foreach (var operation in operations)
+        {
+            var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<Boolean, Boolean>))
+            {
+                Body = new BinaryExpressionNode(operation, typeof(Boolean)) { Left = parameter, Right = parameter },
+                Parameters = [parameter]
+            };
+            var expression = mapper.ToExpression(node);
+
+            Assert.IsNotNull(expression);
+        }
+
+        static IExpressionNodeMapper<Func<Boolean, Boolean>> GetMapper() => new MapsterExpressionNodeMapper<Func<Boolean, Boolean>>();
+    }
+
+    [Test]
+    public void ToExpression_WhenCoalesceOnString_ReturnsNonNull()
+    {
+        var mapper = GetMapper();
+        var parameter = new ParameterExpressionNode(ExpressionType.Parameter, typeof(String)) { Name = "t" };
+        var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<String, String>))
+        {
+            Body = new BinaryExpressionNode(ExpressionType.Coalesce, typeof(String)) { Left = parameter, Right = parameter },
+            Parameters = [parameter]
+        };
+        var expression = mapper.ToExpression(node);
+
+        Assert.IsNotNull(expression);
+
+        static IExpressionNodeMapper<Func<String, String>> GetMapper() => new MapsterExpressionNodeMapper<Func<String, String>>();
+    }
+
+    [Test]
+    public void ToExpression_WhenDoublePowerOperations_ReturnsNonNull()
+    {
+        var operations = new[]
+        {
+            ExpressionType.Power, ExpressionType.PowerAssign
+        };
+        var mapper = GetMapper();
+        var parameter = new ParameterExpressionNode(ExpressionType.Parameter, typeof(Double)) { Name = "t" };
+
+        foreach (var operation in operations)
+        {
+            var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<Double, Double>))
+            {
+                Body = new BinaryExpressionNode(operation, typeof(Double)) { Left = parameter, Right = parameter },
+                Parameters = [parameter]
+            };
+            var expression = mapper.ToExpression(node);
+
+            Assert.IsNotNull(expression);
+        }
+
+        static IExpressionNodeMapper<Func<Double, Double>> GetMapper() => new MapsterExpressionNodeMapper<Func<Double, Double>>();
+    }
+
+    [Test]
+    public void ToExpression_WhenInt32ArithmeticOperations_ReturnsNonNull()
     {
         var operations = new[]
         {
@@ -39,7 +107,7 @@ public class BinaryExpressionNodeMapperTests
     }
 
     [Test]
-    public void Maps_Int_To_Bool_Operations()
+    public void ToExpression_WhenInt32ComparisonOperations_ReturnsNonNull()
     {
         var operations = new[]
         {
@@ -65,90 +133,7 @@ public class BinaryExpressionNodeMapperTests
     }
 
     [Test]
-    public void Maps_Bool_To_Bool_Operations()
-    {
-        var operations = new[]
-        {
-            ExpressionType.AndAlso, ExpressionType.OrElse
-        };
-        var mapper = GetMapper();
-        var parameter = new ParameterExpressionNode(ExpressionType.Parameter, typeof(Boolean)) { Name = "t" };
-
-        foreach (var operation in operations)
-        {
-            var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<Boolean, Boolean>))
-            {
-                Body = new BinaryExpressionNode(operation, typeof(Boolean)) { Left = parameter, Right = parameter },
-                Parameters = [parameter]
-            };
-            var expression = mapper.ToExpression(node);
-
-            Assert.IsNotNull(expression);
-        }
-
-        static IExpressionNodeMapper<Func<Boolean, Boolean>> GetMapper() => new MapsterExpressionNodeMapper<Func<Boolean, Boolean>>();
-    }
-
-    [Test]
-    public void Maps_Double_To_Double_Operations()
-    {
-        var operations = new[]
-        {
-            ExpressionType.Power, ExpressionType.PowerAssign
-        };
-        var mapper = GetMapper();
-        var parameter = new ParameterExpressionNode(ExpressionType.Parameter, typeof(Double)) { Name = "t" };
-
-        foreach (var operation in operations)
-        {
-            var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<Double, Double>))
-            {
-                Body = new BinaryExpressionNode(operation, typeof(Double)) { Left = parameter, Right = parameter },
-                Parameters = [parameter]
-            };
-            var expression = mapper.ToExpression(node);
-
-            Assert.IsNotNull(expression);
-        }
-
-        static IExpressionNodeMapper<Func<Double, Double>> GetMapper() => new MapsterExpressionNodeMapper<Func<Double, Double>>();
-    }
-
-    [Test]
-    public void Maps_Coalesce_Operation()
-    {
-        var mapper = GetMapper();
-        var parameter = new ParameterExpressionNode(ExpressionType.Parameter, typeof(String)) { Name = "t" };
-        var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<String, String>))
-        {
-            Body = new BinaryExpressionNode(ExpressionType.Coalesce, typeof(String)) { Left = parameter, Right = parameter },
-            Parameters = [parameter]
-        };
-        var expression = mapper.ToExpression(node);
-
-        Assert.IsNotNull(expression);
-
-        static IExpressionNodeMapper<Func<String, String>> GetMapper() => new MapsterExpressionNodeMapper<Func<String, String>>();
-    }
-
-    [Test]
-    public void Throws_For_Unsupported_Operation()
-    {
-        var mapper = GetMapper();
-        var parameter = new ParameterExpressionNode(ExpressionType.Parameter, typeof(String)) { Name = "t" };
-        var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<String, String>))
-        {
-            Body = new BinaryExpressionNode(ExpressionType.ArrayIndex, typeof(String)) { Left = parameter, Right = parameter },
-            Parameters = [parameter]
-        };
-
-        Assert.Throws<NotSupportedException>(() => mapper.ToExpression(node));
-
-        static IExpressionNodeMapper<Func<String, String>> GetMapper() => new MapsterExpressionNodeMapper<Func<String, String>>();
-    }
-
-    [Test]
-    public void Maps_With_Multiple_Parameters()
+    public void ToExpression_WhenMultipleParameters_ReturnsNonNull()
     {
         var mapper = GetMapper();
         var parameters = new[]
@@ -165,5 +150,23 @@ public class BinaryExpressionNodeMapperTests
         Assert.IsNotNull(mapper.ToExpression(node));
 
         static IExpressionNodeMapper<Func<Int32, Int32, Int32>> GetMapper() => new MapsterExpressionNodeMapper<Func<Int32, Int32, Int32>>();
+    }
+
+    [Test]
+    public void ToExpression_WhenUnsupportedOperation_ThrowsUnsupportedExpressionException()
+    {
+        var mapper = GetMapper();
+        var parameter = new ParameterExpressionNode(ExpressionType.Parameter, typeof(String)) { Name = "t" };
+        var node = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<String, String>))
+        {
+            Body = new BinaryExpressionNode(ExpressionType.ArrayIndex, typeof(String)) { Left = parameter, Right = parameter },
+            Parameters = [parameter]
+        };
+
+        var exception = Assert.Throws<UnsupportedExpressionException>(() => mapper.ToExpression(node));
+
+        Assert.AreEqual(ExpressionType.ArrayIndex, exception!.NodeType);
+
+        static IExpressionNodeMapper<Func<String, String>> GetMapper() => new MapsterExpressionNodeMapper<Func<String, String>>();
     }
 }

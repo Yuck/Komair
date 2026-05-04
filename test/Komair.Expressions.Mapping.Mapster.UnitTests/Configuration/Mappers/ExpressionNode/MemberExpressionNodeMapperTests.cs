@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Komair.Expressions.Mapping.Abstract.Interfaces;
+using Komair.Expressions.Mapping.Exceptions;
 using NUnit.Framework;
 
 namespace Komair.Expressions.Mapping.Mapster.UnitTests.Configuration.Mappers.ExpressionNode;
@@ -7,7 +8,29 @@ namespace Komair.Expressions.Mapping.Mapster.UnitTests.Configuration.Mappers.Exp
 public class MemberExpressionNodeMapperTests
 {
     [Test]
-    public void Throws_Expected_Exceptions_For_Invalid_Member_Expression_Node()
+    public void ToExpression_WhenMemberAccessExpressionIsConstant_ThrowsMemberAccessException()
+    {
+        var expressionType = ExpressionType.MemberAccess;
+        var memberExpressionNode = new MemberExpressionNode(expressionType, typeof(String))
+        {
+            Expression = new ConstantExpressionNode(ExpressionType.Constant, typeof(String)),
+            MemberName = "HelloWorld"
+        };
+        var lambdaExpressionNode = new LambdaExpressionNode(ExpressionType.Lambda, typeof(Func<String, String>))
+        {
+            Body = memberExpressionNode,
+            Parameters = []
+        };
+
+        var mapper = GetMapper();
+
+        Assert.Throws<MemberAccessException>(() => mapper.ToExpression(lambdaExpressionNode));
+
+        static IExpressionNodeMapper<Func<String, String>> GetMapper() => new MapsterExpressionNodeMapper<Func<String, String>>();
+    }
+
+    [Test]
+    public void ToExpression_WhenMemberAccessExpressionNull_ThrowsInvalidMemberNodeException()
     {
         var expressionType = ExpressionType.MemberAccess;
         var memberExpressionNode = new MemberExpressionNode(expressionType, typeof(String))
@@ -23,11 +46,9 @@ public class MemberExpressionNodeMapperTests
 
         var mapper = GetMapper();
 
-        Assert.Throws<NullReferenceException>(() => mapper.ToExpression(lambdaExpressionNode));
+        var exception = Assert.Throws<InvalidMemberNodeException>(() => mapper.ToExpression(lambdaExpressionNode));
 
-        memberExpressionNode.Expression = new ConstantExpressionNode(ExpressionType.Constant, typeof(String));
-
-        Assert.Throws<MemberAccessException>(() => mapper.ToExpression(lambdaExpressionNode));
+        Assert.AreEqual("HelloWorld", exception!.MemberName);
 
         static IExpressionNodeMapper<Func<String, String>> GetMapper() => new MapsterExpressionNodeMapper<Func<String, String>>();
     }

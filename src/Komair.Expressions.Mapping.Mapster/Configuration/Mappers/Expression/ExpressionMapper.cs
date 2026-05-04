@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Komair.Expressions.Abstract;
+using Komair.Expressions.Mapping.Exceptions;
 using Komair.Expressions.Mapping.Mapster.Configuration.Mappers.Expression.Abstract;
 using Mapster;
 
@@ -12,7 +13,7 @@ internal class ExpressionMapper<T>(TypeAdapterConfig configuration) : Expression
         return source switch
         {
             LambdaExpression lambdaExpression => new LambdaExpressionMapper(Configuration).Map(lambdaExpression),
-            _ => throw new NotSupportedException()
+            _ => throw new InvalidTreeRootException(source)
         };
     }
 }

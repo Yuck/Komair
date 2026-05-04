@@ -6,8 +6,7 @@ public static class BinaryExpressionExtensions
 {
     public static IReadOnlyCollection<ParameterExpression> GetParameterList(this BinaryExpression expression)
     {
-        if (expression is null)
-            return [];
+        ArgumentNullException.ThrowIfNull(expression);
 
         var result = new List<ParameterExpression>();
 
