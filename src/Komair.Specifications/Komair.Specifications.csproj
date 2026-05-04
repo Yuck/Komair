@@ -4,5 +4,6 @@
     <TargetFramework>net8.0</TargetFramework>
     <RepositoryUrl>https://github.com/Yuck/Komair.Specifications</RepositoryUrl>
     <Description>A .NET implementation of the Specification pattern.</Description>
+    <PackageTags>$(KomairPackageTags);specification-pattern;predicate;ddd</PackageTags>
   </PropertyGroup>
 </Project>

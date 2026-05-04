@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Description>A .NET library implementing Komair.Expressions.Serialization using the System.Text.Json APIs.</Description>
+    <PackageTags>$(KomairPackageTags);json;system-text-json;serialization;expressions</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

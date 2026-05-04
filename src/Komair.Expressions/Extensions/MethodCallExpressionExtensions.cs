@@ -2,8 +2,16 @@ using System.Linq.Expressions;
 
 namespace Komair.Expressions.Extensions;
 
+/// <summary>
+/// Extension methods for <see cref="MethodCallExpression"/>.
+/// </summary>
 public static class MethodCallExpressionExtensions
 {
+    /// <summary>
+    /// Returns the distinct <see cref="ParameterExpression"/> nodes referenced by this method call.
+    /// </summary>
+    /// <param name="expression">The method call expression.</param>
+    /// <returns>Distinct parameters from the instance (if any) and arguments.</returns>
     public static IReadOnlyCollection<ParameterExpression> GetParameterList(this MethodCallExpression expression)
     {
         ArgumentNullException.ThrowIfNull(expression);
