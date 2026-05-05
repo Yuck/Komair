@@ -43,4 +43,23 @@ jobs:
         run: dotnet build Komair.slnx --no-restore -c Release
 
       - name: Test
-        run: dotnet test Komair.slnx --no-build -c Release --verbosity normal
+        run: dotnet test Komair.slnx --no-build -c Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+      - name: Install ReportGenerator
+        run: dotnet tool install --tool-path ./.tools dotnet-reportgenerator-globaltool
+
+      - name: Generate coverage report
+        run: |
+          ./.tools/reportgenerator \
+            -reports:./TestResults/**/coverage.cobertura.xml \
+            -targetdir:./TestResults/CoverageReport \
+            -reporttypes:"MarkdownSummaryGithub;Cobertura"
+
+      - name: Publish coverage summary
+        run: cat ./TestResults/CoverageReport/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: ./TestResults/CoverageReport
