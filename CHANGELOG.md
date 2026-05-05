@@ -11,9 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Serializable expression nodes and Mapster mapping for additional LINQ shapes: conditional, `New`, member/list initializer, invocation, quote, and block expressions.
 - JSON polymorphism and deserialization support for the new node types in `Komair.Expressions.Serialization.Json`.
+- Unit test projects `Komair.Expressions.Serialization.UnitTests` and `Komair.Expressions.Mapping.UnitTests` (included in `Komair.slnx`).
 
 ### Changed
 
+- `InvalidNodeRootException` and `InvalidTreeRootException` validate null roots before property initializers run so constructors throw `ArgumentNullException` instead of `NullReferenceException`.
 - `ExpressionExtensions.GetParameterList` covers more expression kinds used in real LINQ trees.
 - `DefaultTypeAdapterConfiguration` registers LINQ-to-node and node-to-LINQ adapters in separate helpers with alphabetized `ForType` entries.
 - EditorConfig: enforce IDE0001 (simplified names), `EnforceCodeStyleInBuild`, and consolidated C# settings under `[*.{cs,csx,cake}]`.

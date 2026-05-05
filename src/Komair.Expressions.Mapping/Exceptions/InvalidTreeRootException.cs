@@ -11,12 +11,17 @@ public sealed class InvalidTreeRootException(Expression expression) : Exception(
     /// <summary>
     /// Gets the <see cref="ExpressionType"/> of the invalid root expression.
     /// </summary>
-    public ExpressionType NodeType { get; } = expression.NodeType;
+    public ExpressionType NodeType { get; } = Validate(expression).NodeType;
 
     private static String CreateMessage(Expression expression)
     {
+        return $"Unsupported expression kind for mapping: {Validate(expression).NodeType}. Only {ExpressionType.Lambda} is supported at the root.";
+    }
+
+    private static Expression Validate(Expression expression)
+    {
         ArgumentNullException.ThrowIfNull(expression);
 
-        return $"Unsupported expression kind for mapping: {expression.NodeType}. Only {ExpressionType.Lambda} is supported at the root.";
+        return expression;
     }
 }

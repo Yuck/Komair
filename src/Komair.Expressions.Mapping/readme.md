@@ -4,7 +4,7 @@ A .NET abstraction library for mapping `Komair.Expressions.ExpressionNode` objec
 
 ## Key Types
 
-Custom exceptions are in the `Komair.Expressions.Mapping.Exceptions` namespace.
+Custom exceptions are in the `Komair.Expressions.Mapping.Exceptions` namespace. Root arguments are validated; passing null for an invalid root throws `ArgumentNullException`.
 
 - **`InvalidMemberNodeException`** &ndash; thrown when a member expression node lacks the inner expression needed to resolve the member
 - **`InvalidNodeRootException`** &ndash; thrown when a mapper expects a `LambdaExpressionNode` at the root but receives another `ExpressionNodeBase` type
