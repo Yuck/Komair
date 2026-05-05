@@ -5,6 +5,15 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.0.0] - 2026-05-05
+
+### Changed
+
+- Upgraded all source and test projects to target `net10.0`.
+- Updated CI and publish workflows to install the `.NET 10` SDK (`10.0.x`).
+- Updated shared NuGet package metadata tags from `net8` to `net10`.
+- Upgraded NuGet dependencies to newer releases, including `Mapster`, `Microsoft.NET.Test.Sdk`, `NUnit`, and `NUnit3TestAdapter`.
+
 ## [8.4.1] - 2026-05-04
 
 ### Added
@@ -49,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI build/test workflow and tag-based NuGet publish workflow.
 - Shared authoring, licensing, and repository metadata for packages.
 
+[10.0.0]: https://github.com/Yuck/Komair/releases/tag/v10.0.0
 [8.4.1]: https://github.com/Yuck/Komair/releases/tag/v8.4.1
 [8.4.0]: https://github.com/Yuck/Komair/releases/tag/v8.4.0
 [8.3.0]: https://github.com/Yuck/Komair/releases/tag/v8.3.0
