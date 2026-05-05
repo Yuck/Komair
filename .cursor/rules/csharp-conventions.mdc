@@ -43,7 +43,8 @@ When creating or editing `.cs` files, apply every section below. Do not rely on 
 
 # XML documentation
 
-- **Required**: `///` comments on every **public** type and on every **public** and **protected** member (including constructors, methods, properties, fields, events, and type parameters where they are part of the public contract). This matches compiler expectations when documentation files are generated and keeps IntelliSense and optional API reference sites useful
+- **Unit tests** (`test/**/*.cs`): do **not** add `///` XML documentation; test assemblies are not shipped as NuGet packages
+- **Required** for shipped library code: `///` comments on every **public** type and on every **public** and **protected** member (including constructors, methods, properties, fields, events, and type parameters where they are part of the public contract). This matches compiler expectations when documentation files are generated and keeps IntelliSense and optional API reference sites useful
 - Use `<param>`, `<returns>`, `<typeparam>`, and `<exception>` when they clarify behavior for callers
 - Use `<inheritdoc />` for overrides and explicit interface implementations when the contract matches the base or interface
 - For **primary constructors**, document parameters with `<param>` on the containing type
