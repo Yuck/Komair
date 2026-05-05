@@ -5,6 +5,20 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.0.1] - 2026-05-05
+
+### Added
+
+- Serializable expression nodes and Mapster mapping for additional LINQ shapes: conditional, `New`, member/list initializer, invocation, quote, and block expressions.
+- JSON polymorphism and deserialization support for the new node types in `Komair.Expressions.Serialization.Json`.
+
+### Changed
+
+- `ExpressionExtensions.GetParameterList` covers more expression kinds used in real LINQ trees.
+- `DefaultTypeAdapterConfiguration` registers LINQ-to-node and node-to-LINQ adapters in separate helpers with alphabetized `ForType` entries.
+- EditorConfig: enforce IDE0001 (simplified names), `EnforceCodeStyleInBuild`, and consolidated C# settings under `[*.{cs,csx,cake}]`.
+- Unit tests reorganized per mapper; conventions clarified (no XML doc comments in tests).
+
 ## [10.0.0] - 2026-05-05
 
 ### Changed
@@ -58,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI build/test workflow and tag-based NuGet publish workflow.
 - Shared authoring, licensing, and repository metadata for packages.
 
+[10.0.1]: https://github.com/Yuck/Komair/releases/tag/v10.0.1
 [10.0.0]: https://github.com/Yuck/Komair/releases/tag/v10.0.0
 [8.4.1]: https://github.com/Yuck/Komair/releases/tag/v8.4.1
 [8.4.0]: https://github.com/Yuck/Komair/releases/tag/v8.4.0
