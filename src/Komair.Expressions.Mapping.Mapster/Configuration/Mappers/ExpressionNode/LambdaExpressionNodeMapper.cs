@@ -11,9 +11,18 @@ internal class LambdaExpressionNodeMapper<T>(TypeAdapterConfig configuration) : 
     public override Expression<T> Map(LambdaExpressionNode source)
     {
         var body = source.Body.Adapt<LinqExpression>(Configuration);
-        var parameters = body.GetParameterList();
+        var bodyParameters = body.GetParameterList();
+        var parameters = source.Parameters.Select(MapParameter).ToArray();
         var result = LinqExpression.Lambda<T>(body, parameters);
 
         return result;
+
+        ParameterExpression MapParameter(ParameterExpressionNode sourceParameter)
+        {
+            var parameter = bodyParameters.FirstOrDefault(t => t.Type == sourceParameter.Type && t.Name == sourceParameter.Name);
+            var expression = parameter ?? sourceParameter.Adapt<ParameterExpression>(Configuration);
+
+            return expression;
+        }
     }
 }

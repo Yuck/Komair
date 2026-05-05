@@ -47,11 +47,18 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
     {
         return node switch
         {
-            ConstantExpressionNode constant => MaterializeConstant(constant),
             BinaryExpressionNode binary => MaterializeBinary(binary),
+            BlockExpressionNode block => MaterializeBlock(block),
+            ConditionalExpressionNode conditional => MaterializeConditional(conditional),
+            ConstantExpressionNode constant => MaterializeConstant(constant),
+            InvocationExpressionNode invocation => MaterializeInvocation(invocation),
             LambdaExpressionNode lambda => MaterializeLambda(lambda),
+            ListInitExpressionNode listInit => MaterializeListInit(listInit),
             MemberExpressionNode member => MaterializeMember(member),
+            MemberInitExpressionNode memberInit => MaterializeMemberInit(memberInit),
+            NewExpressionNode @new => MaterializeNew(@new),
             ParameterExpressionNode parameter => parameter,
+            QuoteExpressionNode quote => MaterializeQuote(quote),
             _ => node
         };
     }
@@ -72,6 +79,31 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
         return binary;
     }
 
+    private static BlockExpressionNode MaterializeBlock(BlockExpressionNode block)
+    {
+        block.Expressions = [.. block.Expressions.Select(MaterializeConstantValues)];
+        block.Variables = [.. block.Variables.Select(t => (ParameterExpressionNode) MaterializeConstantValues(t))];
+
+        return block;
+    }
+
+    private static ConditionalExpressionNode MaterializeConditional(ConditionalExpressionNode conditional)
+    {
+        conditional.Test = MaterializeConstantValues(conditional.Test);
+        conditional.IfTrue = MaterializeConstantValues(conditional.IfTrue);
+        conditional.IfFalse = MaterializeConstantValues(conditional.IfFalse);
+
+        return conditional;
+    }
+
+    private static InvocationExpressionNode MaterializeInvocation(InvocationExpressionNode invocation)
+    {
+        invocation.Expression = MaterializeConstantValues(invocation.Expression);
+        invocation.Arguments = [.. invocation.Arguments.Select(MaterializeConstantValues)];
+
+        return invocation;
+    }
+
     private static LambdaExpressionNode MaterializeLambda(LambdaExpressionNode lambda)
     {
         lambda.Body = MaterializeConstantValues(lambda.Body);
@@ -85,6 +117,50 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
         member.Expression = MaterializeConstantValues(member.Expression);
 
         return member;
+    }
+
+    private static ListInitExpressionNode MaterializeListInit(ListInitExpressionNode listInit)
+    {
+        listInit.NewExpression = MaterializeNew(listInit.NewExpression);
+        listInit.Initializers = [.. listInit.Initializers.Select(MaterializeElementInit)];
+
+        return listInit;
+    }
+
+    private static MemberInitExpressionNode MaterializeMemberInit(MemberInitExpressionNode memberInit)
+    {
+        memberInit.NewExpression = MaterializeNew(memberInit.NewExpression);
+        memberInit.Bindings = [.. memberInit.Bindings.Select(MaterializeMemberAssignment)];
+
+        return memberInit;
+    }
+
+    private static NewExpressionNode MaterializeNew(NewExpressionNode @new)
+    {
+        @new.Arguments = [.. @new.Arguments.Select(MaterializeConstantValues)];
+
+        return @new;
+    }
+
+    private static QuoteExpressionNode MaterializeQuote(QuoteExpressionNode quote)
+    {
+        quote.Operand = MaterializeConstantValues(quote.Operand);
+
+        return quote;
+    }
+
+    private static ElementInitNode MaterializeElementInit(ElementInitNode initializer)
+    {
+        initializer.Arguments = [.. initializer.Arguments.Select(MaterializeConstantValues)];
+
+        return initializer;
+    }
+
+    private static MemberAssignmentNode MaterializeMemberAssignment(MemberAssignmentNode assignment)
+    {
+        assignment.Expression = MaterializeConstantValues(assignment.Expression);
+
+        return assignment;
     }
 
     private static Object? ConvertJsonElement(JsonElement element, Type targetType)
@@ -138,10 +214,17 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
                         };
 
                         t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(BinaryExpressionNode), "Binary"));
+                        t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(BlockExpressionNode), "Block"));
+                        t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(ConditionalExpressionNode), "Conditional"));
                         t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(ConstantExpressionNode), "Constant"));
+                        t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(InvocationExpressionNode), "Invocation"));
                         t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(LambdaExpressionNode), "Lambda"));
+                        t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(ListInitExpressionNode), "ListInit"));
                         t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(MemberExpressionNode), "Member"));
+                        t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(MemberInitExpressionNode), "MemberInit"));
+                        t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(NewExpressionNode), "New"));
                         t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(ParameterExpressionNode), "Parameter"));
+                        t.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(typeof(QuoteExpressionNode), "Quote"));
                     }
                 }
             }

@@ -119,6 +119,25 @@ public class ExpressionNodeSerializerTests
     }
 
     [Test]
+    public void Serialize_WhenExpressionRoundTripsWithMemberInit_PreservesEvaluation()
+    {
+        const String value = "test";
+        var mapper = new MapsterExpressionNodeMapper<Func<String, TestModel>>();
+        var serializer = GetSerializer();
+        Expression<Func<String, TestModel>> expression1 = t => new TestModel { Value = t.Length };
+        var expected = expression1.Compile()(value).Value;
+
+        var node1 = mapper.ToExpressionNode(expression1);
+        var serialized = serializer.Serialize(node1);
+        var node2 = serializer.Deserialize(serialized);
+
+        var expression2 = mapper.ToExpression(node2);
+        var actual = expression2.Compile()(value).Value;
+
+        Assert.AreEqual(expected, actual);
+    }
+
+    [Test]
     public void Serialize_WhenExpressionRoundTripsWithNullConstant_ReturnsNull()
     {
         var mapper = new MapsterExpressionNodeMapper<Func<String?>>();
@@ -161,5 +180,10 @@ public class ExpressionNodeSerializerTests
         var roundTripped = mapper.ToExpression(deserialized);
 
         Assert.AreEqual("hello", roundTripped.Compile()());
+    }
+
+    public class TestModel
+    {
+        public Int32 Value { get; set; }
     }
 }

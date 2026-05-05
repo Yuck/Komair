@@ -21,10 +21,18 @@ public static class ExpressionExtensions
         return expression switch
         {
             BinaryExpression binary => binary.GetParameterList(),
+            BlockExpression block => block.Expressions.SelectMany(t => t.GetParameterList()).Distinct().ToArray(),
+            ConditionalExpression conditional => conditional.Test.GetParameterList().Concat(conditional.IfTrue.GetParameterList()).Concat(conditional.IfFalse.GetParameterList()).Distinct().ToArray(),
             ConstantExpression => [],
+            InvocationExpression invocation => invocation.Expression.GetParameterList().Concat(invocation.Arguments.SelectMany(t => t.GetParameterList())).Distinct().ToArray(),
+            LambdaExpression lambda => lambda.Body.GetParameterList(),
+            ListInitExpression listInit => listInit.NewExpression.GetParameterList().Concat(listInit.Initializers.SelectMany(t => t.Arguments).SelectMany(t => t.GetParameterList())).Distinct().ToArray(),
             MemberExpression member => member.GetParameterList(),
+            MemberInitExpression memberInit => memberInit.NewExpression.GetParameterList().Concat(memberInit.Bindings.OfType<MemberAssignment>().Select(t => t.Expression).SelectMany(t => t.GetParameterList())).Distinct().ToArray(),
             MethodCallExpression call => call.GetParameterList(),
+            NewExpression newExpression => newExpression.Arguments.SelectMany(t => t.GetParameterList()).Distinct().ToArray(),
             ParameterExpression parameter => [parameter],
+            UnaryExpression { NodeType: ExpressionType.Quote } unary => unary.Operand.GetParameterList(),
             UnaryExpression unary => unary.Operand.GetParameterList(),
             _ => throw new UnsupportedExpressionException(expression.NodeType)
         };

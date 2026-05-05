@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using Komair.Expressions.Exceptions;
 using Komair.Expressions.Extensions;
 using NUnit.Framework;
 
@@ -24,14 +23,16 @@ public class ExpressionExtensionsTests
     }
 
     [Test]
-    public void GetParameterList_WhenInvocation_ThrowsUnsupportedExpressionException()
+    public void GetParameterList_WhenInvocation_ReturnsDistinctParameters()
     {
-        var func = Expression.Constant((Func<Int32>) (() => 0));
-        var expression = Expression.Invoke(func);
+        var parameter = Expression.Parameter(typeof(Int32), "t");
+        var lambda = Expression.Lambda<Func<Int32, Int32>>(Expression.Add(parameter, Expression.Constant(1)), parameter);
+        var expression = Expression.Invoke(lambda, parameter);
 
-        var exception = Assert.Throws<UnsupportedExpressionException>(() => expression.GetParameterList());
+        var result = expression.GetParameterList();
 
-        Assert.AreEqual(ExpressionType.Invoke, exception!.NodeType);
+        Assert.That(result, Has.Count.EqualTo(1));
+        Assert.AreSame(parameter, result.Single());
     }
 
     private static T GetNullReference<T>() where T : class => null!;
