@@ -17,6 +17,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Verify changelog matches package version
+        run: |
+          set -euo pipefail
+          version="$(sed -n 's/.*<Version>\(.*\)<\/Version>.*/\1/p' src/Directory.Build.props | head -n1)"
+          if [ -z "${version}" ]; then
+            echo "Could not read <Version> from src/Directory.Build.props"
+            exit 1
+          fi
+          if ! grep -qF "## [${version}]" CHANGELOG.md; then
+            echo "CHANGELOG.md must include a section heading: ## [${version}]"
+            echo "Add release notes when you bump <Version> in src/Directory.Build.props."
+            exit 1
+          fi
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
