@@ -45,21 +45,55 @@ jobs:
       - name: Test
         run: dotnet test Komair.slnx --no-build -c Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults
 
-      - name: Install ReportGenerator
-        run: dotnet tool install --tool-path ./.tools dotnet-reportgenerator-globaltool
-
-      - name: Generate coverage report
-        run: |
-          ./.tools/reportgenerator \
-            -reports:./TestResults/**/coverage.cobertura.xml \
-            -targetdir:./TestResults/CoverageReport \
-            -reporttypes:"MarkdownSummaryGithub;Cobertura"
-
       - name: Publish coverage summary
-        run: cat ./TestResults/CoverageReport/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          python3 - <<'PY'
+          import glob
+          import xml.etree.ElementTree as ET
+
+          files = glob.glob("TestResults/**/coverage.cobertura.xml", recursive=True)
+          if not files:
+              raise SystemExit("No coverage.cobertura.xml files found in TestResults.")
+
+          lines_covered = 0
+          lines_valid = 0
+          branches_covered = 0
+          branches_valid = 0
+          methods_covered = 0
+          methods_valid = 0
+
+          for path in files:
+              root = ET.parse(path).getroot()
+              lines_covered += int(root.attrib.get("lines-covered", 0))
+              lines_valid += int(root.attrib.get("lines-valid", 0))
+              branches_covered += int(root.attrib.get("branches-covered", 0))
+              branches_valid += int(root.attrib.get("branches-valid", 0))
+
+              for method in root.findall(".//method"):
+                  methods_valid += 1
+                  lines = method.findall("./lines/line")
+                  if any(int(line.attrib.get("hits", "0")) > 0 for line in lines):
+                      methods_covered += 1
+
+          def pct(covered, total):
+              return (covered / total * 100.0) if total else 0.0
+
+          summary = [
+              "## Coverage Summary",
+              "",
+              f"- Reports: {len(files)}",
+              f"- Line coverage: {lines_covered}/{lines_valid} ({pct(lines_covered, lines_valid):.2f}%)",
+              f"- Branch coverage: {branches_covered}/{branches_valid} ({pct(branches_covered, branches_valid):.2f}%)",
+              f"- Method coverage: {methods_covered}/{methods_valid} ({pct(methods_covered, methods_valid):.2f}%)",
+          ]
+
+          with open("coverage-summary.md", "w", encoding="utf-8") as f:
+              f.write("\n".join(summary) + "\n")
+          PY
+          cat coverage-summary.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload coverage artifacts
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: ./TestResults/CoverageReport
+          path: ./TestResults
