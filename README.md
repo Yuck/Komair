@@ -17,7 +17,7 @@ Komair provides:
 
 | Folder   | Contents                                                              |
 |---------|-----------------------------------------------------------------------|
-| **src**  | NuGet-ready class libraries (net8.0). Each package may be published independently. |
+| **src**  | NuGet-ready class libraries (net10.0). Each package may be published independently. |
 | **test** | Unit test projects aligned to the source projects.                  |
 
 ### Source Packages

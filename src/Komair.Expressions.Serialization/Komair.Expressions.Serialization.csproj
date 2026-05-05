@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <Description>A .NET abstraction library for serializing Komair.Expressions.ExpressionNode objects to/from other types (in particular, System.Linq.Expressions objects).</Description>
     <PackageTags>$(KomairPackageTags);expressions;serialization;expression-trees</PackageTags>
   </PropertyGroup>

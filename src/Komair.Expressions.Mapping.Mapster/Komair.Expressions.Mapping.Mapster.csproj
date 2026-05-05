@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <Description>A .NET library implementing Komair.Expressions.Mapping using the Mapster package.</Description>
     <PackageTags>$(KomairPackageTags);mapster;expressions;expression-trees;mapping</PackageTags>
   </PropertyGroup>

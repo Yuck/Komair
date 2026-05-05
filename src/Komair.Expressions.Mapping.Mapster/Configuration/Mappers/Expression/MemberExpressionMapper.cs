@@ -9,11 +9,12 @@ internal class MemberExpressionMapper(TypeAdapterConfig configuration) : Express
 {
     public override MemberExpressionNode Map(MemberExpression source)
     {
+        var expression = source.Expression ?? throw new InvalidOperationException($"Member '{source.Member.Name}' does not have an owning expression.");
         var nodeType = source.NodeType;
         var type = source.Type;
         var result = new MemberExpressionNode(nodeType, type)
         {
-            Expression = source.Expression.Adapt<ExpressionNodeBase>(Configuration),
+            Expression = expression.Adapt<ExpressionNodeBase>(Configuration),
             MemberName = source.Member.Name
         };
 
