@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Komair.Specifications\Komair.Specifications.csproj" />
+    <ProjectReference Include="..\..\src\Komair.Specifications.Validation.Abstractions\Komair.Specifications.Validation.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Komair.Specifications.Validation.FluentValidation\Komair.Specifications.Validation.FluentValidation.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -7,6 +7,7 @@
     <Project Path="src/Komair.Expressions.Serialization.Json/Komair.Expressions.Serialization.Json.csproj" />
     <Project Path="src/Komair.Specifications/Komair.Specifications.csproj" />
     <Project Path="src/Komair.Specifications.Validation.Abstractions/Komair.Specifications.Validation.Abstractions.csproj" />
+    <Project Path="src/Komair.Specifications.Validation.FluentValidation/Komair.Specifications.Validation.FluentValidation.csproj" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/Komair.Expressions.Mapping.Mapster.UnitTests/Komair.Expressions.Mapping.Mapster.UnitTests.csproj" />
@@ -16,5 +17,6 @@
     <Project Path="test/Komair.Expressions.UnitTests/Komair.Expressions.UnitTests.csproj" />
     <Project Path="test/Komair.Specifications.UnitTests/Komair.Specifications.UnitTests.csproj" />
     <Project Path="test/Komair.Specifications.Validation.Abstractions.UnitTests/Komair.Specifications.Validation.Abstractions.UnitTests.csproj" />
+    <Project Path="test/Komair.Specifications.Validation.FluentValidation.UnitTests/Komair.Specifications.Validation.FluentValidation.UnitTests.csproj" />
   </Folder>
 </Solution>

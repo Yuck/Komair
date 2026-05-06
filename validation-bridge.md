@@ -127,7 +127,7 @@ Store message keys + fallback text in rule metadata so adapters can use target f
 
 - [X] Phase 0 - Discovery and Constraints
 - [X] Phase 1 - Abstractions Package
-- [ ] Phase 2 - FluentValidation Adapter
+- [X] Phase 2 - FluentValidation Adapter
 - [ ] Phase 3 - DataAnnotations Adapter
 - [ ] Phase 4 - Documentation and Samples
 
@@ -225,11 +225,24 @@ Deliverable: compile-ready abstractions package with tests.
 
 ## Phase 2 - FluentValidation Adapter (3-5 days)
 
-- Create `Komair.Specifications.Validation.FluentValidation`
-- Implement converter pipeline from rules/specifications to `AbstractValidator<T>`
-- Add coverage for simple, composite, and partially mappable cases
+- [X] Create `Komair.Specifications.Validation.FluentValidation`
+- [X] Implement converter pipeline from rules/specifications to `AbstractValidator<T>`
+- [X] Add coverage for simple, composite, and partially mappable cases
 
 Deliverable: adapter package + integration tests.
+
+### Phase 2 completion notes
+
+- Added new package: `src/Komair.Specifications.Validation.FluentValidation`
+- Added `FluentValidationBridge<T>` implementing `IValidationBridge<T, IValidator<T>>`
+  - Translates `ValidationRuleDescriptor<T>` collections into FluentValidation validators
+  - Supports specification input via `Translate(ISpecification<T>, ...)` convenience overload
+  - Preserves metadata where possible (`MessageTemplate`, `ErrorCode`, `ValidationSeverity`)
+  - Infers simple property paths from expression trees and falls back to object-level rule when inference is not possible
+  - Emits translation warnings for object-level fallback scenarios
+- Added `FluentValidationBridgeExtensions` for direct conversion from descriptors/specifications to `IValidator<T>`
+- Added test project: `test/Komair.Specifications.Validation.FluentValidation.UnitTests`
+  - Covers descriptor translation, specification translation, property path inference, severity mapping, and partial fallback/warning behavior
 
 ## Phase 3 - DataAnnotations Adapter (3-5 days)
 
