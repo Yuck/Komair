@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>FluentValidation adapter for Komair specification validation bridge abstractions.</Description>
+    <PackageTags>$(KomairPackageTags);validation;fluentvalidation;specification-pattern;adapter</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Komair.Specifications\Komair.Specifications.csproj" />
+    <ProjectReference Include="..\Komair.Specifications.Validation.Abstractions\Komair.Specifications.Validation.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

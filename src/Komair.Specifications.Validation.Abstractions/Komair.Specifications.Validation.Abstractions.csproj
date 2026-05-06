@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Validation bridge abstractions for reusing specification rules across validation frameworks.</Description>
+    <PackageTags>$(KomairPackageTags);validation;fluentvalidation;dataannotations;specification-pattern</PackageTags>
+  </PropertyGroup>
+
+</Project>
