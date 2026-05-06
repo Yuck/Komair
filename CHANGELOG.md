@@ -5,6 +5,27 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.1.0] - 2026-05-06
+
+### Added
+
+- Validation bridge package `Komair.Specifications.Validation.Abstractions` with normalized rule and translation contracts.
+- FluentValidation adapter package `Komair.Specifications.Validation.FluentValidation` for projecting specification/rule descriptors into `IValidator<T>`.
+- DataAnnotations adapter package `Komair.Specifications.Validation.DataAnnotations` for projecting specification/rule descriptors into runtime `ValidationAttribute` artifacts with metadata-only fallback support.
+- New unit test projects for validation bridge adapters:
+  - `Komair.Specifications.Validation.Abstractions.UnitTests`
+  - `Komair.Specifications.Validation.FluentValidation.UnitTests`
+  - `Komair.Specifications.Validation.DataAnnotations.UnitTests`
+- Validation bridge sample documentation under `samples/`, including:
+  - `AbstractValidator<T>` integration via `Include(...)`
+  - FluentValidation and DataAnnotations usage from specification and rule descriptor inputs
+  - ASP.NET Core model-binding flow with `IValidatableObject`
+
+### Changed
+
+- Updated root and package readmes to document validation bridge packages and usage patterns.
+- Enforced namespace-to-folder alignment via `IDE0130` analyzer severity configuration.
+
 ## [10.0.1] - 2026-05-05
 
 ### Added
@@ -74,6 +95,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI build/test workflow and tag-based NuGet publish workflow.
 - Shared authoring, licensing, and repository metadata for packages.
 
+[10.1.0]: https://github.com/Yuck/Komair/releases/tag/v10.1.0
 [10.0.1]: https://github.com/Yuck/Komair/releases/tag/v10.0.1
 [10.0.0]: https://github.com/Yuck/Komair/releases/tag/v10.0.0
 [8.4.1]: https://github.com/Yuck/Komair/releases/tag/v8.4.1

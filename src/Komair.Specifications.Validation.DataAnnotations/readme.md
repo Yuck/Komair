@@ -18,3 +18,33 @@ DataAnnotations adapter for Komair specification validation bridge abstractions.
 ```bash
 dotnet add package Komair.Specifications.Validation.DataAnnotations
 ```
+
+## Usage
+
+```csharp
+using Komair.Specifications.Validation.Abstractions.Rules;
+using Komair.Specifications.Validation.DataAnnotations.Extensions;
+
+var rules = new[]
+{
+    new ValidationRuleDescriptor<User>(t => t.Age >= 18, "User must be an adult", "Age", "AGE001")
+};
+var translation = rules.ToDataAnnotationsArtifacts();
+```
+
+```csharp
+using System.Linq.Expressions;
+using Komair.Specifications.Abstract;
+using Komair.Specifications.Validation.DataAnnotations.Extensions;
+
+public sealed class AdultUserSpecification : SpecificationBase<User>
+{
+    public override Expression<Func<User, Boolean>> ToExpression()
+    {
+        return t => t.Age >= 18;
+    }
+}
+
+var specification = new AdultUserSpecification();
+var translationFromSpecification = specification.ToDataAnnotationsArtifacts("User must be an adult", errorCode: "AGE001");
+```
