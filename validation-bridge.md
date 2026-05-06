@@ -128,7 +128,7 @@ Store message keys + fallback text in rule metadata so adapters can use target f
 - [X] Phase 0 - Discovery and Constraints
 - [X] Phase 1 - Abstractions Package
 - [X] Phase 2 - FluentValidation Adapter
-- [ ] Phase 3 - DataAnnotations Adapter
+- [X] Phase 3 - DataAnnotations Adapter
 - [ ] Phase 4 - Documentation and Samples
 
 ## Implementation Phases
@@ -246,11 +246,28 @@ Deliverable: adapter package + integration tests.
 
 ## Phase 3 - DataAnnotations Adapter (3-5 days)
 
-- Create `Komair.Specifications.Validation.DataAnnotations`
-- Implement best-effort attribute/metadata generation
-- Add explicit diagnostics for unsupported dynamic/composite scenarios
+- [X] Create `Komair.Specifications.Validation.DataAnnotations`
+- [X] Implement best-effort attribute/metadata generation
+- [X] Add explicit diagnostics for unsupported dynamic/composite scenarios
 
 Deliverable: adapter package + integration tests.
+
+### Phase 3 completion notes
+
+- Added new package: `src/Komair.Specifications.Validation.DataAnnotations`
+- Added `DataAnnotationsBridge<T>` implementing `IValidationBridge<T, DataAnnotationsRuleArtifact<T>>`
+  - Translates `ValidationRuleDescriptor<T>` collections into DataAnnotations translation artifacts
+  - Supports specification input via `Translate(ISpecification<T>, ...)` convenience overload
+  - Produces runtime attribute artifacts for mappable rules using a predicate-backed validation attribute
+  - Produces metadata-only artifacts when safe attribute projection is not possible
+- Added `DataAnnotationsRuleArtifact<T>` to carry generated attribute output or metadata-only fallback details
+- Added explicit diagnostics:
+  - `AmbiguousComposite` for composite predicate shapes (`AndAlso` / `OrElse` / `Not`)
+  - `MissingPropertyPath` when no stable path can be inferred or provided
+  - `DynamicRuleNotSupported` for dynamic invocation scenarios
+- Added `DataAnnotationsBridgeExtensions` under `Extensions` namespace
+- Added test project: `test/Komair.Specifications.Validation.DataAnnotations.UnitTests`
+  - Covers descriptor/spec translation, runtime attribute behavior, and metadata-only fallback diagnostics
 
 ## Phase 4 - Documentation and Samples (2-3 days)
 

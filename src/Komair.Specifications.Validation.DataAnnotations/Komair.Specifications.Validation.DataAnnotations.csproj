@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>DataAnnotations adapter for Komair specification validation bridge abstractions.</Description>
+    <PackageTags>$(KomairPackageTags);validation;dataannotations;specification-pattern;adapter</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Komair.Specifications\Komair.Specifications.csproj" />
+    <ProjectReference Include="..\Komair.Specifications.Validation.Abstractions\Komair.Specifications.Validation.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

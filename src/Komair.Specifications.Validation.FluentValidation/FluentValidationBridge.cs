@@ -75,26 +75,6 @@ public class FluentValidationBridge<T> : IValidationBridge<T, IValidator<T>>
             builder.OverridePropertyName(path);
         }
 
-        private static String? ResolvePropertyPath(Expression<Func<T, Boolean>> predicate, String? explicitPath)
-        {
-            if (! String.IsNullOrWhiteSpace(explicitPath))
-                return explicitPath;
-
-            return TryExtractPropertyPath(predicate.Body);
-        }
-
-        private static String? TryExtractPropertyPath(Expression body)
-        {
-            return body switch
-            {
-                BinaryExpression binaryExpression => TryExtractPropertyPath(binaryExpression.Left) ?? TryExtractPropertyPath(binaryExpression.Right),
-                MemberExpression memberExpression => GetMemberPath(memberExpression),
-                MethodCallExpression methodCallExpression => methodCallExpression.Object is null ? null : TryExtractPropertyPath(methodCallExpression.Object),
-                UnaryExpression unaryExpression => TryExtractPropertyPath(unaryExpression.Operand),
-                _ => null
-            };
-        }
-
         private static String? GetMemberPath(MemberExpression memberExpression)
         {
             Expression? current = memberExpression;
@@ -116,6 +96,26 @@ public class FluentValidationBridge<T> : IValidationBridge<T, IValidator<T>>
             {
                 ValidationSeverity.Warning => Severity.Warning,
                 _ => Severity.Error
+            };
+        }
+
+        private static String? ResolvePropertyPath(Expression<Func<T, Boolean>> predicate, String? explicitPath)
+        {
+            if (! String.IsNullOrWhiteSpace(explicitPath))
+                return explicitPath;
+
+            return TryExtractPropertyPath(predicate.Body);
+        }
+
+        private static String? TryExtractPropertyPath(Expression body)
+        {
+            return body switch
+            {
+                BinaryExpression binaryExpression => TryExtractPropertyPath(binaryExpression.Left) ?? TryExtractPropertyPath(binaryExpression.Right),
+                MemberExpression memberExpression => GetMemberPath(memberExpression),
+                MethodCallExpression methodCallExpression => methodCallExpression.Object is null ? null : TryExtractPropertyPath(methodCallExpression.Object),
+                UnaryExpression unaryExpression => TryExtractPropertyPath(unaryExpression.Operand),
+                _ => null
             };
         }
     }
