@@ -5,6 +5,7 @@
     <Project Path="src/Komair.Expressions.Mapping.Mapster/Komair.Expressions.Mapping.Mapster.csproj" />
     <Project Path="src/Komair.Expressions.Serialization/Komair.Expressions.Serialization.csproj" />
     <Project Path="src/Komair.Expressions.Serialization.Json/Komair.Expressions.Serialization.Json.csproj" />
+    <Project Path="src/Komair.Specifications.EntityFrameworkCore/Komair.Specifications.EntityFrameworkCore.csproj" />
     <Project Path="src/Komair.Specifications/Komair.Specifications.csproj" />
     <Project Path="src/Komair.Specifications.Validation.Abstractions/Komair.Specifications.Validation.Abstractions.csproj" />
     <Project Path="src/Komair.Specifications.Validation.DataAnnotations/Komair.Specifications.Validation.DataAnnotations.csproj" />
@@ -16,6 +17,7 @@
     <Project Path="test/Komair.Expressions.Serialization.Json.UnitTests/Komair.Expressions.Serialization.Json.UnitTests.csproj" />
     <Project Path="test/Komair.Expressions.Serialization.UnitTests/Komair.Expressions.Serialization.UnitTests.csproj" />
     <Project Path="test/Komair.Expressions.UnitTests/Komair.Expressions.UnitTests.csproj" />
+    <Project Path="test/Komair.Specifications.EntityFrameworkCore.UnitTests/Komair.Specifications.EntityFrameworkCore.UnitTests.csproj" />
     <Project Path="test/Komair.Specifications.UnitTests/Komair.Specifications.UnitTests.csproj" />
     <Project Path="test/Komair.Specifications.Validation.Abstractions.UnitTests/Komair.Specifications.Validation.Abstractions.UnitTests.csproj" />
     <Project Path="test/Komair.Specifications.Validation.DataAnnotations.UnitTests/Komair.Specifications.Validation.DataAnnotations.UnitTests.csproj" />
