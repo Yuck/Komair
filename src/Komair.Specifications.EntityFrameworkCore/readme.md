@@ -4,7 +4,8 @@ Entity Framework Core query composition helpers for Komair specifications. This 
 
 ## Key Types
 
-- _Initial scaffolding only_: public helper types and extensions are added in subsequent implementation steps.
+- **`QueryableSpecificationExtensions`** &ndash; `Where` applies an `ISpecification<T>` to an `IQueryable<T>` when the filter always applies.
+- **`WhereIf`** &ndash; overloads that apply a specification or a predicate only when a Boolean condition is true, so optional filters (search fields, toggles) stay in one fluent chain without branching into separate `Where` calls. Prefer `Where` / `Queryable.Where` when the filter is unconditional. Arguments are still evaluated and null-checked before the method runs; see the XML documentation remarks on each overload for details.
 
 ## Dependencies
 
