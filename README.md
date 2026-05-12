@@ -12,6 +12,7 @@ Komair provides:
 - **Expression serialization** — Abstractions and concrete implementations for serializing expression nodes (`Komair.Expressions.Serialization`, `Komair.Expressions.Serialization.Json`).
 - **Expression mapping** — Abstractions and Mapster-based implementations for mapping between expression representations (`Komair.Expressions.Mapping`, `Komair.Expressions.Mapping.Mapster`).
 - **Specifications** — A .NET implementation of the Specification pattern (`Komair.Specifications`).
+- **Specifications + EF Core** — Optional `IQueryable<T>` helpers that compose specifications with Entity Framework Core (`Komair.Specifications.EntityFrameworkCore`).
 - **Validation bridge adapters** — Optional adapters that project shared rules to FluentValidation and DataAnnotations (`Komair.Specifications.Validation.*`).
 
 ## Repository Structure
@@ -31,6 +32,7 @@ Komair provides:
 | **Komair.Expressions.Mapping**            | [![NuGet](https://img.shields.io/nuget/v/Komair.Expressions.Mapping.svg)](https://www.nuget.org/packages/Komair.Expressions.Mapping) | Abstractions for mapping `ExpressionNode` objects. |
 | **Komair.Expressions.Mapping.Mapster**    | [![NuGet](https://img.shields.io/nuget/v/Komair.Expressions.Mapping.Mapster.svg)](https://www.nuget.org/packages/Komair.Expressions.Mapping.Mapster) | Mapster-based implementation of expression mapping. |
 | **Komair.Specifications**                 | [![NuGet](https://img.shields.io/nuget/v/Komair.Specifications.svg)](https://www.nuget.org/packages/Komair.Specifications) | Implementation of the Specification pattern. |
+| **Komair.Specifications.EntityFrameworkCore** | [![NuGet](https://img.shields.io/nuget/v/Komair.Specifications.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Komair.Specifications.EntityFrameworkCore) | Optional EF Core helpers for composing specifications with `IQueryable<T>`. |
 | **Komair.Specifications.Validation.Abstractions** | [![NuGet](https://img.shields.io/nuget/v/Komair.Specifications.Validation.Abstractions.svg)](https://www.nuget.org/packages/Komair.Specifications.Validation.Abstractions) | Shared validation bridge rule and translation contracts. |
 | **Komair.Specifications.Validation.FluentValidation** | [![NuGet](https://img.shields.io/nuget/v/Komair.Specifications.Validation.FluentValidation.svg)](https://www.nuget.org/packages/Komair.Specifications.Validation.FluentValidation) | FluentValidation adapter for shared validation bridge rules. |
 | **Komair.Specifications.Validation.DataAnnotations** | [![NuGet](https://img.shields.io/nuget/v/Komair.Specifications.Validation.DataAnnotations.svg)](https://www.nuget.org/packages/Komair.Specifications.Validation.DataAnnotations) | DataAnnotations adapter with metadata fallback and diagnostics. |
