@@ -1,21 +1,19 @@
 # Komair.Expressions.Mapping
 
-A .NET abstraction library for mapping `Komair.Expressions.ExpressionNode` objects to and from other representations (in particular `System.Linq.Expressions`).
+A .NET abstraction library for mapping `Komair.Expressions.ExpressionNode` objects to and from other representations (in particular `System.Linq.Expressions`). Concrete mappers (such as Mapster) live in separate packages and implement `IExpressionNodeMapper`.
 
 ## Key Types
 
-Custom exceptions are in the `Komair.Expressions.Mapping.Exceptions` namespace. Root arguments are validated; passing null for an invalid root throws `ArgumentNullException`.
+- **`IExpressionNodeMapper<T>`** (`Komair.Expressions.Mapping.Abstract.Interfaces`) &ndash; maps between `ExpressionNodeBase` graphs and `System.Linq.Expressions.Expression` trees
+- **`InvalidMemberNodeException`** (`Komair.Expressions.Mapping.Exceptions`) &ndash; thrown when a member expression node lacks the inner expression needed to resolve the member
+- **`InvalidNodeRootException`** (`Komair.Expressions.Mapping.Exceptions`) &ndash; thrown when a mapper expects a `LambdaExpressionNode` at the root but receives another `ExpressionNodeBase` type
+- **`InvalidTreeRootException`** (`Komair.Expressions.Mapping.Exceptions`) &ndash; thrown when a mapper expects a `LambdaExpression` at the root but receives another `System.Linq.Expressions.Expression` shape
 
-- **`InvalidMemberNodeException`** &ndash; thrown when a member expression node lacks the inner expression needed to resolve the member
-- **`InvalidNodeRootException`** &ndash; thrown when a mapper expects a `LambdaExpressionNode` at the root but receives another `ExpressionNodeBase` type
-- **`InvalidTreeRootException`** &ndash; thrown when a mapper expects a `LambdaExpression` at the root but receives another `System.Linq.Expressions.Expression` shape
+Root arguments are validated; passing null for an invalid root throws `ArgumentNullException`.
 
-## Key Concepts
+## Dependencies
 
-- **mapping abstraction** &ndash; defines contracts for converting between serializable expression nodes and runtime expression trees
-- **expression-node centric design** &ndash; focuses on `ExpressionNodeBase` and its derived node types as the mapping boundary
-
-This package does not depend on any specific mapping framework; concrete implementations live in separate packages such as `Komair.Expressions.Mapping.Mapster`.
+- [Komair.Expressions](https://www.nuget.org/packages/Komair.Expressions)
 
 ## Installation
 

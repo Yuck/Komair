@@ -2,7 +2,9 @@ using System.Linq.Expressions;
 using System.Text.Json.Nodes;
 using Komair.Expressions.Abstract;
 using Komair.Expressions.Mapping.Mapster;
+using Komair.Expressions.Serialization;
 using Komair.Expressions.Serialization.Abstract.Interfaces;
+using Komair.Expressions.Serialization.Exceptions;
 using NUnit.Framework;
 
 namespace Komair.Expressions.Serialization.Json.UnitTests;
@@ -15,12 +17,66 @@ public class ExpressionNodeSerializerTests
     }
 
     [Test]
-    public void Deserialize_WhenJsonEmpty_Throws()
+    public void Deserialize_WhenEnvelopeMissingNode_ThrowsExpressionSerializationException()
+    {
+        var serializer = GetSerializer();
+        var document = new JsonObject
+        {
+            [ExpressionSerializationWireFormat.SchemaPropertyName] = ExpressionSerializationWireFormat.CurrentSchemaVersion
+        };
+
+        var exception = Assert.Throws<ExpressionSerializationException>(() => serializer.Deserialize(document));
+
+        Assert.That(exception!.Message, Does.Contain(ExpressionSerializationWireFormat.NodePropertyName));
+    }
+
+    [Test]
+    public void Deserialize_WhenJsonEmpty_ThrowsExpressionSerializationException()
     {
         var serializer = GetSerializer();
         var empty = new JsonObject();
 
-        Assert.Throws<NotSupportedException>(() => serializer.Deserialize(empty));
+        Assert.Throws<ExpressionSerializationException>(() => serializer.Deserialize(empty));
+    }
+
+    [Test]
+    public void Deserialize_WhenLegacyBareNodeFormat_RoundTrips()
+    {
+        var mapper = new MapsterExpressionNodeMapper<Func<Int32>>();
+        var serializer = GetSerializer();
+
+        var node = mapper.ToExpressionNode(CreateExpression());
+        var envelope = serializer.Serialize(node);
+        var legacy = envelope[ExpressionSerializationWireFormat.NodePropertyName]!.AsObject();
+
+        var deserialized = serializer.Deserialize(legacy);
+        var roundTripped = mapper.ToExpression(deserialized);
+
+        Assert.AreEqual(42, roundTripped.Compile()());
+
+        return;
+
+        Expression<Func<Int32>> CreateExpression() => () => 42;
+    }
+
+    [Test]
+    public void Deserialize_WhenSchemaVersionUnsupported_ThrowsExpressionSerializationException()
+    {
+        var mapper = new MapsterExpressionNodeMapper<Func<Int32>>();
+        var serializer = GetSerializer();
+
+        var node = mapper.ToExpressionNode(CreateExpression());
+        var envelope = serializer.Serialize(node);
+
+        envelope[ExpressionSerializationWireFormat.SchemaPropertyName] = 99;
+
+        var exception = Assert.Throws<ExpressionSerializationException>(() => serializer.Deserialize(envelope));
+
+        Assert.That(exception!.Message, Does.Contain("99"));
+
+        return;
+
+        Expression<Func<Int32>> CreateExpression() => () => 42;
     }
 
     [Test]
@@ -28,14 +84,17 @@ public class ExpressionNodeSerializerTests
     {
         var mapper = new MapsterExpressionNodeMapper<Func<Boolean>>();
         var serializer = GetSerializer();
-        Expression<Func<Boolean>> expression = () => true;
 
-        var node = mapper.ToExpressionNode(expression);
+        var node = mapper.ToExpressionNode(CreateExpression());
         var serialized = serializer.Serialize(node);
         var deserialized = serializer.Deserialize(serialized);
         var roundTripped = mapper.ToExpression(deserialized);
 
         Assert.IsTrue(roundTripped.Compile()());
+
+        return;
+
+        Expression<Func<Boolean>> CreateExpression() => () => true;
     }
 
     [Test]
@@ -43,14 +102,17 @@ public class ExpressionNodeSerializerTests
     {
         var mapper = new MapsterExpressionNodeMapper<Func<Double>>();
         var serializer = GetSerializer();
-        Expression<Func<Double>> expression = () => 3.14;
 
-        var node = mapper.ToExpressionNode(expression);
+        var node = mapper.ToExpressionNode(CreateExpression());
         var serialized = serializer.Serialize(node);
         var deserialized = serializer.Deserialize(serialized);
         var roundTripped = mapper.ToExpression(deserialized);
 
         Assert.AreEqual(3.14, roundTripped.Compile()());
+
+        return;
+
+        Expression<Func<Double>> CreateExpression() => () => 3.14;
     }
 
     [Test]
@@ -58,14 +120,17 @@ public class ExpressionNodeSerializerTests
     {
         var mapper = new MapsterExpressionNodeMapper<Func<ExpressionType>>();
         var serializer = GetSerializer();
-        Expression<Func<ExpressionType>> expression = () => ExpressionType.Lambda;
 
-        var node = mapper.ToExpressionNode(expression);
+        var node = mapper.ToExpressionNode(CreateExpression());
         var serialized = serializer.Serialize(node);
         var deserialized = serializer.Deserialize(serialized);
         var roundTripped = mapper.ToExpression(deserialized);
 
         Assert.AreEqual(ExpressionType.Lambda, roundTripped.Compile()());
+
+        return;
+
+        Expression<Func<ExpressionType>> CreateExpression() => () => ExpressionType.Lambda;
     }
 
     [Test]
@@ -73,14 +138,17 @@ public class ExpressionNodeSerializerTests
     {
         var mapper = new MapsterExpressionNodeMapper<Func<Int32>>();
         var serializer = GetSerializer();
-        Expression<Func<Int32>> expression = () => 42;
 
-        var node = mapper.ToExpressionNode(expression);
+        var node = mapper.ToExpressionNode(CreateExpression());
         var serialized = serializer.Serialize(node);
         var deserialized = serializer.Deserialize(serialized);
         var roundTripped = mapper.ToExpression(deserialized);
 
         Assert.AreEqual(42, roundTripped.Compile()());
+
+        return;
+
+        Expression<Func<Int32>> CreateExpression() => () => 42;
     }
 
     [Test]
@@ -88,14 +156,17 @@ public class ExpressionNodeSerializerTests
     {
         var mapper = new MapsterExpressionNodeMapper<Func<Int64>>();
         var serializer = GetSerializer();
-        Expression<Func<Int64>> expression = () => 42L;
 
-        var node = mapper.ToExpressionNode(expression);
+        var node = mapper.ToExpressionNode(CreateExpression());
         var serialized = serializer.Serialize(node);
         var deserialized = serializer.Deserialize(serialized);
         var roundTripped = mapper.ToExpression(deserialized);
 
         Assert.AreEqual(42L, roundTripped.Compile()());
+
+        return;
+
+        Expression<Func<Int64>> CreateExpression() => () => 42L;
     }
 
     [Test]
@@ -105,10 +176,9 @@ public class ExpressionNodeSerializerTests
         var mapper = new MapsterExpressionNodeMapper<Func<String, Boolean>>();
         var serializer = GetSerializer();
 
-        Expression<Func<String, Boolean>> expression1 = t => t.Length > 0;
-        var expected = expression1.Compile()(value);
+        var expected = CreateExpression().Compile()(value);
 
-        var node1 = mapper.ToExpressionNode(expression1);
+        var node1 = mapper.ToExpressionNode(CreateExpression());
         var serialized = serializer.Serialize(node1);
         var node2 = serializer.Deserialize(serialized);
 
@@ -116,6 +186,10 @@ public class ExpressionNodeSerializerTests
         var actual = expression2.Compile()(value);
 
         Assert.AreEqual(expected, actual);
+
+        return;
+
+        Expression<Func<String, Boolean>> CreateExpression() => t => t.Length > 0;
     }
 
     [Test]
@@ -124,10 +198,10 @@ public class ExpressionNodeSerializerTests
         const String value = "test";
         var mapper = new MapsterExpressionNodeMapper<Func<String, TestModel>>();
         var serializer = GetSerializer();
-        Expression<Func<String, TestModel>> expression1 = t => new TestModel { Value = t.Length };
-        var expected = expression1.Compile()(value).Value;
 
-        var node1 = mapper.ToExpressionNode(expression1);
+        var expected = CreateExpression().Compile()(value).Value;
+
+        var node1 = mapper.ToExpressionNode(CreateExpression());
         var serialized = serializer.Serialize(node1);
         var node2 = serializer.Deserialize(serialized);
 
@@ -135,6 +209,10 @@ public class ExpressionNodeSerializerTests
         var actual = expression2.Compile()(value).Value;
 
         Assert.AreEqual(expected, actual);
+
+        return;
+
+        Expression<Func<String, TestModel>> CreateExpression() => t => new TestModel { Value = t.Length };
     }
 
     [Test]
@@ -142,14 +220,17 @@ public class ExpressionNodeSerializerTests
     {
         var mapper = new MapsterExpressionNodeMapper<Func<String?>>();
         var serializer = GetSerializer();
-        Expression<Func<String?>> expression = () => null;
 
-        var node = mapper.ToExpressionNode(expression);
+        var node = mapper.ToExpressionNode(CreateExpression());
         var serialized = serializer.Serialize(node);
         var deserialized = serializer.Deserialize(serialized);
         var roundTripped = mapper.ToExpression(deserialized);
 
         Assert.IsNull(roundTripped.Compile()());
+
+        return;
+
+        Expression<Func<String?>> CreateExpression() => () => null;
     }
 
     [Test]
@@ -157,14 +238,17 @@ public class ExpressionNodeSerializerTests
     {
         var mapper = new MapsterExpressionNodeMapper<Func<Single>>();
         var serializer = GetSerializer();
-        Expression<Func<Single>> expression = () => 3.14f;
 
-        var node = mapper.ToExpressionNode(expression);
+        var node = mapper.ToExpressionNode(CreateExpression());
         var serialized = serializer.Serialize(node);
         var deserialized = serializer.Deserialize(serialized);
         var roundTripped = mapper.ToExpression(deserialized);
 
         Assert.AreEqual(3.14f, roundTripped.Compile()());
+
+        return;
+
+        Expression<Func<Single>> CreateExpression() => () => 3.14f;
     }
 
     [Test]
@@ -172,14 +256,35 @@ public class ExpressionNodeSerializerTests
     {
         var mapper = new MapsterExpressionNodeMapper<Func<String>>();
         var serializer = GetSerializer();
-        Expression<Func<String>> expression = () => "hello";
 
-        var node = mapper.ToExpressionNode(expression);
+        var node = mapper.ToExpressionNode(CreateExpression());
         var serialized = serializer.Serialize(node);
         var deserialized = serializer.Deserialize(serialized);
         var roundTripped = mapper.ToExpression(deserialized);
 
         Assert.AreEqual("hello", roundTripped.Compile()());
+
+        return;
+
+        Expression<Func<String>> CreateExpression() => () => "hello";
+    }
+
+    [Test]
+    public void Serialize_WhenNodeSerialized_IncludesSchemaAndNodeEnvelope()
+    {
+        var mapper = new MapsterExpressionNodeMapper<Func<Int32>>();
+        var serializer = GetSerializer();
+
+        var node = mapper.ToExpressionNode(CreateExpression());
+        var serialized = serializer.Serialize(node);
+
+        Assert.AreEqual(ExpressionSerializationWireFormat.CurrentSchemaVersion, serialized[ExpressionSerializationWireFormat.SchemaPropertyName]!.GetValue<Int32>());
+        Assert.IsInstanceOf<JsonObject>(serialized[ExpressionSerializationWireFormat.NodePropertyName]);
+        Assert.AreEqual("Lambda", serialized[ExpressionSerializationWireFormat.NodePropertyName]!["$type"]!.GetValue<String>());
+
+        return;
+
+        Expression<Func<Int32>> CreateExpression() => () => 42;
     }
 
     public class TestModel

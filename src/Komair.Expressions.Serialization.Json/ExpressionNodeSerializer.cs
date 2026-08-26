@@ -3,6 +3,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Komair.Expressions.Abstract;
+using Komair.Expressions.Serialization;
 using Komair.Expressions.Serialization.Abstract.Interfaces;
 using Komair.Expressions.Serialization.Exceptions;
 using Komair.Expressions.Serialization.Json.Internal;
@@ -21,9 +22,37 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
     /// <inheritdoc />
     public TExpressionNode Deserialize(JsonObject document)
     {
-        var json = document.ToJsonString();
+        var nodeDocument = UnwrapNodeDocument(document);
 
-        var result = JsonSerializer.Deserialize<TExpressionNode>(json, _options);
+        return DeserializeNode(nodeDocument);
+    }
+
+    /// <inheritdoc />
+    public JsonObject Serialize(TExpressionNode node)
+    {
+        var nodeDocument = SerializeNode(node);
+
+        return new JsonObject
+        {
+            [ExpressionSerializationWireFormat.SchemaPropertyName] = ExpressionSerializationWireFormat.CurrentSchemaVersion,
+            [ExpressionSerializationWireFormat.NodePropertyName] = nodeDocument
+        };
+    }
+
+    private TExpressionNode DeserializeNode(JsonObject nodeDocument)
+    {
+        var json = nodeDocument.ToJsonString();
+
+        TExpressionNode? result;
+        try
+        {
+            result = JsonSerializer.Deserialize<TExpressionNode>(json, _options);
+        }
+        catch (Exception exception) when (exception is JsonException or NotSupportedException)
+        {
+            throw new ExpressionSerializationException($"Failed to deserialize {typeof(TExpressionNode).Name} from JSON.", exception);
+        }
+
         if (result is ExpressionNodeBase root)
             result = (TExpressionNode) MaterializeConstantValues(root);
 
@@ -33,14 +62,36 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
         return result;
     }
 
-    /// <inheritdoc />
-    public JsonObject Serialize(TExpressionNode node)
+    private JsonObject SerializeNode(TExpressionNode node)
     {
         var json = JsonSerializer.SerializeToNode(node, _options);
         if (json is JsonObject value)
             return value;
 
         throw new ExpressionSerializationException("Expected JSON root to be an object.");
+    }
+
+    private static JsonObject UnwrapNodeDocument(JsonObject document)
+    {
+        if (! document.ContainsKey(ExpressionSerializationWireFormat.SchemaPropertyName))
+            return document;
+
+        if (document[ExpressionSerializationWireFormat.SchemaPropertyName] is not JsonValue schemaValue)
+            throw new ExpressionSerializationException($"Property '{ExpressionSerializationWireFormat.SchemaPropertyName}' must be a JSON number.");
+
+        if (! schemaValue.TryGetValue(out Int32 schemaVersion))
+            throw new ExpressionSerializationException($"Property '{ExpressionSerializationWireFormat.SchemaPropertyName}' must be a JSON number.");
+
+        if (schemaVersion > ExpressionSerializationWireFormat.CurrentSchemaVersion)
+            throw new ExpressionSerializationException($"Unsupported expression serialization schema version {schemaVersion}; maximum supported version is {ExpressionSerializationWireFormat.CurrentSchemaVersion}.");
+
+        if (schemaVersion < ExpressionSerializationWireFormat.CurrentSchemaVersion)
+            throw new ExpressionSerializationException($"Unsupported expression serialization schema version {schemaVersion}; migrate stored payloads or use a serializer that supports that schema.");
+
+        if (document[ExpressionSerializationWireFormat.NodePropertyName] is not JsonObject nodeDocument)
+            throw new ExpressionSerializationException($"Property '{ExpressionSerializationWireFormat.NodePropertyName}' must be a JSON object.");
+
+        return nodeDocument;
     }
 
     private static ExpressionNodeBase MaterializeConstantValues(ExpressionNodeBase node)
