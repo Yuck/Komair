@@ -5,6 +5,17 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.1.3] - 2026-08-26
+
+### Added
+
+- Package `Komair.Expressions.Serialization.MessagePack` with `ExpressionNodeSerializer<TExpressionNode>` for schema 1 binary envelopes (`[schemaVersion, node]`) using MessagePack-CSharp.
+- Unit test project `Komair.Expressions.Serialization.MessagePack.UnitTests` covering round-trips and envelope validation.
+
+### Changed
+
+- `ExpressionSerializationWireFormat` documentation clarified so `CurrentSchemaVersion` is shared across JSON and MessagePack; JSON property names remain JSON-specific.
+
 ## [10.1.2] - 2026-08-26
 
 ### Added

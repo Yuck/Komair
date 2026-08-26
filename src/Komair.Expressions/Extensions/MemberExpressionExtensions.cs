@@ -14,8 +14,6 @@ public static class MemberExpressionExtensions
     /// <returns>Parameters from the inner expression, or an empty collection when there is no inner expression.</returns>
     public static IReadOnlyCollection<ParameterExpression> GetParameterList(this MemberExpression expression)
     {
-        return expression is { Expression: { } inner }
-            ? inner.GetParameterList()
-            : [];
+        return expression is { Expression: { } inner } ? inner.GetParameterList() : [];
     }
 }

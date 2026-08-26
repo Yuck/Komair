@@ -42,16 +42,7 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
     private TExpressionNode DeserializeNode(JsonObject nodeDocument)
     {
         var json = nodeDocument.ToJsonString();
-
-        TExpressionNode? result;
-        try
-        {
-            result = JsonSerializer.Deserialize<TExpressionNode>(json, _options);
-        }
-        catch (Exception exception) when (exception is JsonException or NotSupportedException)
-        {
-            throw new ExpressionSerializationException($"Failed to deserialize {typeof(TExpressionNode).Name} from JSON.", exception);
-        }
+        var result = DeserializeRaw(json);
 
         if (result is ExpressionNodeBase root)
             result = (TExpressionNode) MaterializeConstantValues(root);
@@ -60,6 +51,18 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
             throw new ExpressionSerializationException($"Failed to deserialize {typeof(TExpressionNode).Name} from JSON.");
 
         return result;
+
+        TExpressionNode? DeserializeRaw(String documentJson)
+        {
+            try
+            {
+                return JsonSerializer.Deserialize<TExpressionNode>(documentJson, _options);
+            }
+            catch (Exception exception) when (exception is JsonException or NotSupportedException)
+            {
+                throw new ExpressionSerializationException($"Failed to deserialize {typeof(TExpressionNode).Name} from JSON.", exception);
+            }
+        }
     }
 
     private JsonObject SerializeNode(TExpressionNode node)
