@@ -4,13 +4,13 @@ Core abstractions for bridging specification-based rules into validation-oriente
 
 ## Key Types
 
-- `Rules.Abstract.Interfaces.IValidationRuleProvider<T>`: Provides normalized validation rule descriptors for a target model type.
-- `Translations.Abstract.Interfaces.IValidationBridge<T, TArtifact>`: Translates normalized rules into framework-specific artifacts.
-- `Rules.Abstract.Interfaces.IValidationAwareSpecification<T>`: Optional contract for specifications that can expose validation metadata.
-- `Rules.ValidationRuleDescriptor<T>`: Canonical rule shape that combines predicate semantics and validation metadata.
-- `Translations.ValidationTranslationResult<TArtifact>`: Structured translation output with artifacts, warnings, and failures.
-- `Translations.ValidationTranslationFailure`: Structured translation failure details.
-- `Translations.ValidationTranslationWarning`: Structured translation warning details.
+- **`IValidationRuleProvider<T>`** (`Rules.Abstract.Interfaces`) &ndash; provides normalized validation rule descriptors for a target model type
+- **`IValidationBridge<T, TArtifact>`** (`Translations.Abstract.Interfaces`) &ndash; translates normalized rules into framework-specific artifacts
+- **`IValidationAwareSpecification<T>`** (`Rules.Abstract.Interfaces`) &ndash; optional contract for specifications that can expose validation metadata
+- **`ValidationRuleDescriptor<T>`** (`Rules`) &ndash; canonical rule shape that combines predicate semantics and validation metadata
+- **`ValidationTranslationResult<TArtifact>`** (`Translations`) &ndash; structured translation output with artifacts, warnings, and failures
+- **`ValidationTranslationFailure`** (`Translations`) &ndash; structured translation failure details
+- **`ValidationTranslationWarning`** (`Translations`) &ndash; structured translation warning details
 
 ## Usage
 
@@ -23,12 +23,8 @@ var rules = new[]
 };
 ```
 
-## Dependencies
-
-- None
-
 ## Installation
 
-```bash
+```shell
 dotnet add package Komair.Specifications.Validation.Abstractions
 ```

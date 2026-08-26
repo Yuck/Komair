@@ -10,8 +10,8 @@ A Mapster-based implementation of the Komair expression mapping abstractions.
 ## Dependencies
 
 - [Mapster](https://www.nuget.org/packages/Mapster)
-- `Komair.Expressions`
-- `Komair.Expressions.Mapping`
+- [Komair.Expressions](https://www.nuget.org/packages/Komair.Expressions)
+- [Komair.Expressions.Mapping](https://www.nuget.org/packages/Komair.Expressions.Mapping)
 
 ## Installation
 

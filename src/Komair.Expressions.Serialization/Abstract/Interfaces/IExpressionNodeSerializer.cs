@@ -20,6 +20,6 @@ public interface IExpressionNodeSerializer<T, TExpressionNode> where TExpression
     /// Serializes an expression node graph to a document.
     /// </summary>
     /// <param name="node">The root expression node.</param>
-    /// <returns>The serialized document.</returns>
+    /// <returns>The serialized document. JSON implementations use the versioned envelope described by <see cref="ExpressionSerializationWireFormat"/>.</returns>
     T Serialize(TExpressionNode node);
 }
