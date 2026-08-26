@@ -1,12 +1,13 @@
 namespace Komair.Expressions.Serialization;
 
 /// <summary>
-/// Identifies the versioned JSON envelope produced by <c>Komair.Expressions.Serialization.Json</c>.
+/// Identifies the versioned expression serialization envelope schema shared by concrete serializers.
 /// </summary>
 /// <remarks>
-/// <para><b>Schema 0 (legacy):</b> the document root is the expression node graph (for example a root <c>$type</c> of <c>Lambda</c>).</para>
-/// <para><b>Schema 1 (current):</b> the document root is an object with <see cref="NodePropertyName"/> holding the node graph and <see cref="SchemaPropertyName"/> set to <see cref="CurrentSchemaVersion"/>.</para>
-/// <para>When node shapes change in a breaking way, increment <see cref="CurrentSchemaVersion"/>, teach <c>ExpressionNodeSerializer</c> to read older schemas, and document migration steps in the JSON package readme.</para>
+/// <para><see cref="CurrentSchemaVersion"/> is shared across formats. JSON documents use <see cref="SchemaPropertyName"/> and <see cref="NodePropertyName"/>; MessagePack documents use a 2-element array of <c>[schemaVersion, node]</c>.</para>
+/// <para><b>Schema 0 (JSON legacy):</b> the document root is the expression node graph (for example a root <c>$type</c> of <c>Lambda</c>).</para>
+/// <para><b>Schema 1 (current):</b> JSON roots are objects with <see cref="NodePropertyName"/> holding the node graph and <see cref="SchemaPropertyName"/> set to <see cref="CurrentSchemaVersion"/>. MessagePack roots are <c>[1, node]</c>.</para>
+/// <para>When node shapes change in a breaking way, increment <see cref="CurrentSchemaVersion"/>, teach each concrete serializer to read older schemas, and document migration steps in that package's readme.</para>
 /// </remarks>
 public static class ExpressionSerializationWireFormat
 {

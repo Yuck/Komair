@@ -10,11 +10,11 @@ internal class ConstantExpressionNodeMapper(TypeAdapterConfig configuration) : E
     public override ConstantExpression Map(ConstantExpressionNode source)
     {
         var type = source.Type;
-        var value = source.Value is null
-                        ? null
-                        : source.Value.GetType() != type
-                            ? Convert.ChangeType(source.Value, type)
-                            : source.Value;
+
+        if (source.Value is null)
+            return LinqExpression.Constant(null, type);
+
+        var value = source.Value.GetType() != type ? Convert.ChangeType(source.Value, type) : source.Value;
         var result = LinqExpression.Constant(value, type);
 
         return result;
