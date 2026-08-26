@@ -85,11 +85,27 @@ public class ExpressionNodeSerializer<TExpressionNode>(JsonSerializerOptions? op
         if (schemaVersion > ExpressionSerializationWireFormat.CurrentSchemaVersion)
             throw new ExpressionSerializationException($"Unsupported expression serialization schema version {schemaVersion}; maximum supported version is {ExpressionSerializationWireFormat.CurrentSchemaVersion}.");
 
-        if (schemaVersion < ExpressionSerializationWireFormat.CurrentSchemaVersion)
-            throw new ExpressionSerializationException($"Unsupported expression serialization schema version {schemaVersion}; migrate stored payloads or use a serializer that supports that schema.");
+        return schemaVersion switch
+        {
+            0 => GetSchemaZeroNode(document),
+            1 => GetEnvelopeNode(document),
+            _ => throw new ExpressionSerializationException($"Unsupported expression serialization schema version {schemaVersion}; migrate stored payloads or use a serializer that supports that schema.")
+        };
+    }
 
+    private static JsonObject GetEnvelopeNode(JsonObject document)
+    {
         if (document[ExpressionSerializationWireFormat.NodePropertyName] is not JsonObject nodeDocument)
             throw new ExpressionSerializationException($"Property '{ExpressionSerializationWireFormat.NodePropertyName}' must be a JSON object.");
+
+        return nodeDocument;
+    }
+
+    private static JsonObject GetSchemaZeroNode(JsonObject document)
+    {
+        var nodeDocument = document.DeepClone().AsObject();
+
+        nodeDocument.Remove(ExpressionSerializationWireFormat.SchemaPropertyName);
 
         return nodeDocument;
     }

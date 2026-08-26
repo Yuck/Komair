@@ -80,6 +80,28 @@ public class ExpressionNodeSerializerTests
     }
 
     [Test]
+    public void Deserialize_WhenSchemaVersionZero_RoundTrips()
+    {
+        var mapper = new MapsterExpressionNodeMapper<Func<Int32>>();
+        var serializer = GetSerializer();
+
+        var node = mapper.ToExpressionNode(CreateExpression());
+        var envelope = serializer.Serialize(node);
+        var schemaZero = envelope[ExpressionSerializationWireFormat.NodePropertyName]!.AsObject().DeepClone().AsObject();
+
+        schemaZero[ExpressionSerializationWireFormat.SchemaPropertyName] = 0;
+
+        var deserialized = serializer.Deserialize(schemaZero);
+        var roundTripped = mapper.ToExpression(deserialized);
+
+        Assert.AreEqual(42, roundTripped.Compile()());
+
+        return;
+
+        Expression<Func<Int32>> CreateExpression() => () => 42;
+    }
+
+    [Test]
     public void Serialize_WhenExpressionRoundTripsWithBooleanConstant_ReturnsTrue()
     {
         var mapper = new MapsterExpressionNodeMapper<Func<Boolean>>();
